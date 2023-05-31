@@ -213,31 +213,31 @@ function renderPricing() {
         enterpriseDesc.innerText = PROTRACTOR_DESC_ENTERPRISE
 
         document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
-            btn.textContent = 'Get a Custom Quote'
+            btn.textContent = 'Get a Custom Quote';
         })
     }
 }
 
 servicesToggle.addEventListener('click', () => {
-    selectedCategory = 'services'
-    renderPricing()
+  selectedCategory = 'services'
+  renderPricing()
 })
 productsToggle.addEventListener('click', () => {
-    selectedCategory = 'products'
-    renderPricing()
+  selectedCategory = 'products'
+  renderPricing()
 })
 
 angularToggle.addEventListener('click', () => {
-    selectedProduct = 'angular'
-    renderPricing()
+  selectedProduct = 'angular'
+  renderPricing()
 })
 vueToggle.addEventListener('click', () => {
-    selectedProduct = 'vue'
-    renderPricing()
+  selectedProduct = 'vue'
+  renderPricing()
 })
 protractorToggle.addEventListener('click', () => {
-    selectedProduct = 'protractor'
-    renderPricing()
+  selectedProduct = 'protractor'
+  renderPricing()
 })
 
 let showModal = false;
@@ -287,203 +287,232 @@ const initialParams = getCurrentParamsObject();
 
 renderStep(initialParams);
 
-seatsInput.type = 'number';
-seatsInput.addEventListener('input', (e) => {
-  // Get the current input value
-  let currentValue = parseInt(e.target.value, 10);
-
-  if (currentValue === NaN) {
-    e.target.value = 1;
-    return;
-  }
-
-  // Ensure the value is between 1 and 10
-  if (currentValue < 1) {
-    e.target.value = 1;
-    return;
-  }
-  // Update the input value with the constrained value
-  e.target.value = currentValue;
-});
-
 step1Form.addEventListener('submit', (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  console.log('submit');
 });
 
 step2Form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    step1Form.style.display = 'block';
-    errorMessageStep2.style.display = 'none';
-    successMessageStep2.style.display = 'none';
-
+  e.preventDefault();
+  step1Form.style.display = 'block';
+  errorMessageStep2.style.display = 'none';
+  successMessageStep2.style.display = 'none';
 });
 
 step3Form.addEventListener('submit', (e) => {
-    e.preventDefault();
+  e.preventDefault();
 });
 
 function getCurrentParams () {
-    const url = new URL(window.location.href)
-    return url.searchParams
+  const url = new URL(window.location.href)
+  return url.searchParams
 }
 
 function getCurrentParamsObject() {
-    const searchParams = getCurrentParams();
-    const paramsObject = {};
-    searchParams.forEach((value, key) => {
-        paramsObject[key] = value;
-    });
-    return paramsObject;
+  const searchParams = getCurrentParams();
+  const paramsObject = {};
+  searchParams.forEach((value, key) => {
+    paramsObject[key] = value;
+  });
+  return paramsObject;
 }
 
-function addOrUpdateURLParams(paramsToUpdate) {
-    const currentParams = getCurrentParams();
+function addOrUpdateURLParams(paramsToUpdate, skipPushState) {
+  const currentParams = getCurrentParams();
 
-    for (const [key, value] of Object.entries(paramsToUpdate)) {
-        if (value === null) {
-            currentParams.delete(key);
-        } else {
-            currentParams.set(key, value);
-        }
+  for (const [key, value] of Object.entries(paramsToUpdate)) {
+    if (value === null) {
+      currentParams.delete(key);
+    } else {
+      currentParams.set(key, value);
     }
+  }
 
-    let newRelativePathQuery = window.location.pathname;
+  let newRelativePathQuery = window.location.pathname;
 
-    if (currentParams.toString()) {
-        newRelativePathQuery += "?" + currentParams.toString();
-    }
+  if (currentParams.toString()) {
+    newRelativePathQuery += "?" + currentParams.toString();
+  }
 
+  if (!skipPushState) {
     window.history.pushState(null, "", newRelativePathQuery);
-    
+
     const updatedParams = getCurrentParamsObject();
     
     renderStep(updatedParams);
+  }
+
 }
 
 function renderModal(showPricingModal) {
-    pricingCalculatorModal.style.display = showPricingModal ? 'block' : 'none';
-    errorMessage.style.display = 'none';
-    errorMessageStep2.style.display = 'none';
+  pricingCalculatorModal.style.display = showPricingModal ? 'block' : 'none';
+  errorMessage.style.display = 'none';
+  errorMessageStep2.style.display = 'none';
 }
 
 function calculatePrice(seats) {
-    let price;
+  let price;
 
-    if (seats >= 1 && seats <= 4) {
-        price = 4000;
-    } else if (seats >= 5 && seats <= 60) {
-        price = seats * 1000;
-    } else if (seats >= 61 && seats <= 100) {
-        price = 60000;
-    } else {
-        price = null;
-    }
+  if (seats >= 1 && seats <= 4) {
+      price = 4000;
+  } else if (seats >= 5 && seats <= 60) {
+      price = seats * 1000;
+  } else if (seats >= 61 && seats <= 100) {
+      price = 60000;
+  } else {
+      price = null;
+  }
 
-    return price;
+  return price;
 }
 
 function formatPrice(number) {
-    if (number) {
-        return number.toLocaleString('en-US');
-    } else {
-        return null;
-    }
+  return number ? number.toLocaleString('en-US') : null;
 }
 
 
 function renderStep(params) {
-    const pricingStep = params['pricing_step'];
-    const productSelected = params['product'];
+  const pricingStep = params['pricing_step'];
+  const productSelected = params['product'];
 
-    if (!pricingStep) {
-        renderModal(false)
-        return;
+  if (!pricingStep) {
+      renderModal(false)
+      return;
+  }
+
+  const selectedProductText = products[productSelected];
+  if (selectedProductText) {
+      productSelectedLabel.textContent = selectedProductText;
+      productLabel.textContent = selectedProductText;
+  } else { 
+      productSelectedLabel.textContent = 'Select a Product'
+  }
+  
+  renderModal(true);
+  const step = Number(pricingStep);
+  progress.style.width = `${(progressBar.offsetWidth / 100) * (100 / TOTAL_STEPS * step)}px`;
+
+  switch (step) {
+    case 1: {
+      step1.style.display = 'block';
+      step2.style.display = 'none';
+      step3.style.display = 'none';
+      generalForm.style.display = 'none';
+      calendarContainer.style.display = 'none';
+      stepMessage.textContent = `Step ${step} of ${TOTAL_STEPS}`;
+      break;
+    } case 2: {
+      step1.style.display = 'none';
+      step2.style.display = 'block';
+      step3.style.display = 'none';
+      generalForm.style.display = 'none';
+      calendarContainer.style.display = 'none';
+      stepMessage.textContent = `Step ${step} of ${TOTAL_STEPS}`;
+      emulateFormSubmission();
+      break;
+    } case 3: {
+      const seats = parseInt(params['seats'], 10);
+      if (!seats) {
+        throw new Error('No seats added');
+      }
+      const anualPrice = formatPrice(calculatePrice(seats));
+      if (anualPrice) {
+        const pricePerSeatText = formatPrice(calculatePrice(seats)/seats);
+        if (seats <= 4) {
+          pricePerSeat.textContent = `$4,000`;
+        } else {
+          pricePerSeat.textContent = `$${pricePerSeatText}`;
+        }
+
+        // This is the "per seat/year" text
+        pricePerSeatInfo.style.display = 'block';
+      } else {
+        pricePerSeat.textContent = 'Talk to Sales';
+
+        // This is the "per seat/year" text
+        pricePerSeatInfo.style.display = 'none'
+      }
+
+      if (seats <= 4) {
+        detailSeats.textContent = `Up to 4`;
+        pricePerSeatInfo.textContent = 'per year';
+        priceInfo.textContent = `Up to 4 total seats.`;
+      } else { 
+        detailSeats.textContent = seats;
+        pricePerSeatInfo.textContent = 'per seat/year';
+        priceInfo.textContent = `$${anualPrice} for ${seats} total seat${seats > 1 ? 's' : ''}.`;
+      }
+
+      detailBilled.textContent = 'Annually';
+      detailProduct.textContent = selectedProductText;
+      detailAdditional.textContent = '$1,000/year';
+
+      step1.style.display = 'none';
+      step2.style.display = 'none';
+      step3.style.display = 'block';
+      generalForm.style.display = 'none';
+      calendarContainer.style.display = 'none';
+      stepMessage.textContent = `You're all set!`;
+      showCalendar();
+      break;
+    } case 4: {
+      step1.style.display = 'none';
+      step2.style.display = 'none';
+      step3.style.display = 'none';
+      stepMessage.textContent = `Select a date for a call`;
+      showCalendar()
+      break;
     }
+  }
+}
 
-    const selectedProductText = products[productSelected];
-    if (selectedProductText) {
-        productSelectedLabel.textContent = selectedProductText;
-        productLabel.textContent = selectedProductText;
-    } else { 
-        productSelectedLabel.textContent = 'Select a Product'
-    }
-    
-    renderModal(true);
-    const step = Number(pricingStep);
-    progress.style.width = `${(progressBar.offsetWidth / 100) * (100 / TOTAL_STEPS * step)}px`;
+function appendInputsToFormAndSubmit(values, form) {
+  const newUrlHash = {};
+  Object.keys(values).forEach((key) => {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = key;
+    input.value = values[key];
+    newUrlHash[key] = null;
+    form.appendChild(input);
+  });
 
-    switch (step) {
-        case 1:
-            step1.style.display = 'block';
-            step2.style.display = 'none';
-            step3.style.display = 'none';
-            generalForm.style.display = 'none';
-            calendarContainer.style.display = 'none';
-            stepMessage.textContent = `Step ${step} of ${TOTAL_STEPS}`;
-            break;
-        case 2:
-            step1.style.display = 'none';
-            step2.style.display = 'block';
-            step3.style.display = 'none';
-            generalForm.style.display = 'none';
-            calendarContainer.style.display = 'none';
-            stepMessage.textContent = `Step ${step} of ${TOTAL_STEPS}`;
-            emulateFormSubmission();
-            break;
+  addOrUpdateURLParams(newUrlHash, false);
 
-        case 3:
-            const seats = parseInt(params['seats'], 10);
-            if (!seats) {
-                throw new Error('No seats added');
-            }
-            const anualPrice = formatPrice(calculatePrice(seats));
-            if (anualPrice) {
-                const pricePerSeatText = formatPrice(calculatePrice(seats)/seats);
-                if (seats <= 4) {
-                    pricePerSeat.textContent = `$4,000`;
-                } else {
-                    pricePerSeat.textContent = `$${pricePerSeatText}`;
-                }
+  $(form).submit();
+}
 
-                // This is the "per seat/year" text
-                pricePerSeatInfo.style.display = 'block';
-            } else {
-                pricePerSeat.textContent = 'Talk to Sales';
+function getContactInfo() {
+  const searchParams = getCurrentParamsObject();
+  const product = searchParams.product || searchParams.product_interest;
+  const contactFromUrlParams = {
+    firstname: searchParams.firstname,
+    lastname: searchParams.lastname,
+    company: searchParams.company,
+    email: searchParams.email,
+    phone: searchParams.phone,
+    product_interest: product,
+    read: true
+  };
 
-                // This is the "per seat/year" text
-                pricePerSeatInfo.style.display = 'none'
-            }
+  const contactFromForm = {
+    firstname: firstName.value,
+    lastname: lastName.value,
+    company: company.value,
+    email: email.value,
+    phone: phone.value,
+    product_interest: product
+  };
 
-            if (seats <= 4) {
-                detailSeats.textContent = `Up to 4`;
-                pricePerSeatInfo.textContent = 'per year';
-                priceInfo.textContent = `Up to 4 total seats.`;
-            } else { 
-                detailSeats.textContent = seats;
-                pricePerSeatInfo.textContent = 'per seat/year';
-                priceInfo.textContent = `$${anualPrice} for ${seats} total seat${seats > 1 ? 's' : ''}.`;
-            }
-            detailBilled.textContent = 'Annually';
-            detailProduct.textContent = selectedProductText;
-            detailAdditional.textContent = '$1,000/year';
-            
-
-            step1.style.display = 'none';
-            step2.style.display = 'none';
-            step3.style.display = 'block';
-            generalForm.style.display = 'none';
-            calendarContainer.style.display = 'none';
-            stepMessage.textContent = `You're all set!`;
-            showCalendar()
-            break;
-          case 4:
-            step1.style.display = 'none';
-            step2.style.display = 'none';
-            step3.style.display = 'none';
-            stepMessage.textContent = `Select a date for a call`;
-            showCalendar()
-            break;
-    }
+  return (
+    contactFromUrlParams.firstname &&
+    contactFromUrlParams.lastname &&
+    contactFromUrlParams.email &&
+    contactFromUrlParams.phone &&
+    contactFromUrlParams.product_interest
+  ) ? 
+    contactFromUrlParams :
+    contactFromForm;
 }
 
 function emulateFormSubmission() {
@@ -504,104 +533,105 @@ function emulateFormSubmission() {
   phone.value = phoneInput.value;
   phone.name = 'phone';
 
-  submitButton.type = 'submit'
+  addOrUpdateURLParams(getContactInfo(), !!getContactInfo().read);
+
+  submitButton.type = 'submit';
   submitButton.click();
 }
-
+// var calendarInitted = false;
 function showCalendar() {
-  // append div element for calendly
-  var divElement = document.createElement('div');
-  divElement.id = 'calendly-container';
-  divElement.style.display = 'none';
-  document.body.appendChild(divElement);
-
-  Calendly.initInlineWidget({
-    url: [
-      'https://calendly.com/jtrainque/30min-1?',
-      'hide_gdpr_banner=1',
-    ].join('&'),
-    parentElement: divElement,
-    prefill: {},
-    utm: {}
-  });
-
-  const markup = document.getElementById('calendly-container').innerHTML;
-
+  const current = new Date();
   calendarContainer.innerHTML = `
-    <div style="height: 800px">
-      <div id="calendly-small" style="height: 100%;">${markup}</div>
-    </div>
+    <iframe
+     src="https://calendly.com/jtrainque/30min-1?embed_domain=hero-devs-24601.webflow.io&embed_type=Inline&hide_gdpr_banner=1&month=${current.getFullYear()}-${current.getMonth() + 1}"
+     frameborder="0"
+     style="width: 100%; height: 100% min-height: 500px"
+    />
   `;
 
   calendarContainer.style.display = 'block';
-  
+  // this is a test
   setTimeout(() => {
     const iframeContainer = document.querySelector('.meetings-iframe-container');
     if (iframeContainer) {
       iframeContainer.style.height = 'auto';
     }
   }, 1500);
+
 }
 
 function verifyStep1() {
-    const formReady = !!firstNameInput.value &&
-                      !!lastNameInput.value &&
-                      !!emailInput.value &&
-                      !!phoneInput.value;
-                      // !!companyInput.value;
+  const formReady = !!firstNameInput.value &&
+    !!lastNameInput.value &&
+    !!emailInput.value; // &&
+    // !!phoneInput.value;
+    // !!companyInput.value;
 
-    if (!formReady) {
-        errorMessage.style.display = 'block';
-        errorMessage.firstChild.textContent = 'Please complete the form to continue 🙏🏽';
-        return false;
-    }
+  if (!formReady) {
+    errorMessage.style.display = 'block';
+    errorMessage.firstChild.textContent = 'Please complete the form to continue 🙏🏽';
+    return false;
+  }
 
-    errorMessage.style.display = 'none';
-    return true;
+  errorMessage.style.display = 'none';
+  return true;
 }
 
 function verifyStep2() {
-    const formReady = !!seatsInput.value;
-    if (!formReady) {
-        errorMessageStep2.style.display = 'block';
-        errorMessageStep2.firstChild.textContent = 'Please select the number of seats 💺';
-        return false;
-    }
-    errorMessageStep2.style.display = 'none';
-    return true;
+  const formReady = !!seatsInput.value;
+  if (!formReady) {
+    errorMessageStep2.style.display = 'block';
+    errorMessageStep2.firstChild.textContent = 'Please select the number of seats 💺';
+    return false;
+  }
+  errorMessageStep2.style.display = 'none';
+  return true;
 }
 
 step1Next.addEventListener('click', () => {
-    if (verifyStep1()) {
-        addOrUpdateURLParams({ 'pricing_step': '2' });
-    }
+  const updatedParams = getContactInfo();
+  updatedParams.pricing_step = '2';
+  if (verifyStep1()) {
+    addOrUpdateURLParams(updatedParams);
+  }
 });
 
 step2Next.addEventListener('click', () => {
-    if (verifyStep2()) {
-        addOrUpdateURLParams({ 'pricing_step': '3', seats: seatsInput.value });
-    }
+  const urlContactInputObject = getContactInfo();
+  urlContactInputObject.nes_seats = isNaN(Number(seatsInput.value)) ? 1 : Number(seatsInput.value);
+  appendInputsToFormAndSubmit(urlContactInputObject, submitForm);
+  if (verifyStep2()) {
+    let newUrlParams = {};
+    Object.keys(urlContactInputObject).forEach((key) => {
+      newUrlParams[key] = null;
+    });
+    newUrlParams.pricing_step = 3;
+    newUrlParams.seats = seatsInput.value;
+    addOrUpdateURLParams(newUrlParams);
+  }
 });
 
 step2Before.addEventListener('click', () => {
-    addOrUpdateURLParams({ 'pricing_step': '1' });
+  addOrUpdateURLParams({ 'pricing_step': '1' });
 });
 
 step3Before.addEventListener('click', () => {
-    addOrUpdateURLParams({ 'pricing_step': '2' });
+  addOrUpdateURLParams({ 'pricing_step': '2' });
 });
 
 pricingCalculatorModalBackdrop.addEventListener('click', () => {
-addOrUpdateURLParams({ 'pricing_step': null, product: null, seats: null });
-    // create function to reset state
+  addOrUpdateURLParams({ 'pricing_step': null, product: null, seats: null });
 })
 
 window.addEventListener('popstate', function(event) {
-    // Your code to execute when the back button is clicked
-    const updatedParams = getCurrentParamsObject();
-    renderStep(updatedParams);
+  // Your code to execute when the back button is clicked
+  const updatedParams = getCurrentParamsObject();
+  if (!!getContactInfo().read) { return; }
+
+  renderStep(updatedParams);
 });
 
 scheduleCallButton.addEventListener('click', () => {
   addOrUpdateURLParams({ 'pricing_step': '4' });
-})
+});
+

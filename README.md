@@ -5,7 +5,7 @@ This repo is a collection of scripts that power webflow herodevs.com site intera
 
 ## Scripts
 
-### `/scripts/pricing.js`
+### [`/scripts/pricing.js`](/scripts/pricing.js)
 
 This script drives interactions on the `herdevs.com/pricing` page. It primarily does 3 things:
 
@@ -16,11 +16,9 @@ This script drives interactions on the `herdevs.com/pricing` page. It primarily 
 3. controls the form stepper modal interactions and submission
   - users are walked through a series of form inputs a'la stepper, which is controlled/determined via url params which are controlled/read/handled within this script
 
-### `/scripts/global.js`
+### [`scripts/global.js`](scripts/global.js)
 
-
-
-### `/scripts/_support.js` (NOT CURRENTLY USED)
+Loads calendly widget and other stuff.
 
 This script drives interactions on the `herdevs.com/support/*` pages. Where it is included in the page in webflow, there are 2 properties needed in order to drive this script:
 
