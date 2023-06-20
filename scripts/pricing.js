@@ -62,6 +62,7 @@ const errorChild = document.getElementById('error-message');
 const errorMessage = (errorChild || { parentElement: { style: { display: 'none' } } }).parentElement;
 const productLabel = document.getElementById('product-label');
 const seatsInput = document.getElementById('seats');
+seatsInput.type = 'number';
 
 const errorMessageStep2 = document.getElementById('error-message-s2');
 const successMessageStep2 = document.getElementById('success-message-s2');
@@ -272,7 +273,7 @@ lastNameInput.placeholder = 'Enter your last name';
 phoneInput.placeholder = 'Enter phone number';
 companyInput.placeholder = 'Enter company name';
 emailInput.placeholder = 'Enter company email';
-seatsInput.value = 1;
+seatsInput.value = 0;
 
 const TOTAL_STEPS = 3;
 
@@ -412,7 +413,7 @@ function renderStep(params) {
       break;
     } case 3: {
       const seats = parseInt(params['seats'], 10);
-      if (!seats) {
+      if (isNaN(Number(seats))) {
         throw new Error('No seats added');
       }
       const anualPrice = formatPrice(calculatePrice(seats));
@@ -549,13 +550,19 @@ function showCalendar() {
     />
   `;
 
+  const innerHeight = '950px';
   calendarContainer.style.display = 'block';
+  calendarContainer.style.minHeight = innerHeight;
+  modalParts.card.style.minHeight = '1100px';
+  step3.style.minHeight = innerHeight;
+
   // this is a test
   setTimeout(() => {
     const iframeContainer = document.querySelector('.meetings-iframe-container');
     if (iframeContainer) {
-      iframeContainer.style.height = 'auto';
+      iframeContainer.style.minHeight = 'auto';
     }
+    calendarContainer.querySelector('iframe').style.minHeight = innerHeight;
   }, 1500);
 
 }

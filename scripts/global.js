@@ -133,16 +133,45 @@ $(this).submit(function (e) { // when the form submits
 
           // if response inline, display contents
           if (response.inlineMessage) {
-            const parent = $(e.target).parent();
-            parent.children("form").css("display", "none"); // hide form
 
-          
-            parent.children(".w-form-done").css("display", "block").html(html);
-
-          } else if (response.redirectUri) {
-            window.location.href = response.redirectUri
-          } else {
-            calendarContainer.style.display = 'block';
+            /**
+             * page is NOT disclosures
+             */
+            if (!~window.location.href.indexOf('support/disclosures')) {
+              const calendarContainer = document.getElementById('calendar-container');
+              const current = new Date();
+              const html = `
+                <iframe
+                 src="https://calendly.com/jtrainque/30min-1?embed_domain=hero-devs-24601.webflow.io&embed_type=Inline&hide_gdpr_banner=1&month=${current.getFullYear()}-${current.getMonth() + 1}"
+                 frameborder="0"
+                 style="width: 100%; height: 100%; min-height: 500px"
+                />
+              `;
+              calendarContainer.innerHTML = html;
+              const parent = $(e.target).parent();
+              parent.children("form").css("display", "none"); // hide form
+            } else {
+              /**
+               * page IS disclosures
+               */
+              const parent = $(e.target).parent();
+              parent.children("form").css("display", "none"); // hide form
+              let ms = 5000;
+              const reset = function(seconds) { 
+                return '<p>Resetting form in ' + seconds + ' seconds</p>'
+              }
+              parent.children(".w-form-done").css("display", "block").html(response.inlineMessage + reset(ms/1000));
+  
+              const interval = setInterval(function() {
+                if (ms === 1000) {
+                  window.location.reload();
+                  return clearInterval(interval);
+                }
+                ms = ms - 1000
+                const message = response.inlineMessage + reset(ms/1000);
+                parent.children(".w-form-done").html(message);
+              }, 1000);
+            }
           }
         } else {
           console.log('response but no inlineMessage or redirectUri')
