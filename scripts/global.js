@@ -23,7 +23,13 @@ $(this).submit(function (e) { // when the form submits
     
     try {
       if (pricingSelected) {
-        const extraData = { name: 'plan', value: pricingSelected };
+        let plan = pricingSelected;
+        if (selectedProduct && selectedProduct === 'vue'){ 
+          plan = pricingSelected.toLowerCase().trim() === 'corporate' ?
+            'Core':
+            'Core + Essentials';
+        }
+        const extraData = { name: 'plan', value: plan };
         parsedFormData.push(extraData)
       }
     } catch (err) {
