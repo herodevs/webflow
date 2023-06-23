@@ -139,10 +139,6 @@ const originalLeftColumnHeaderText = leftPricingColumnHeader.innerText;
 const rightPricingColumnHeader = document.getElementById('right-column-header');
 const originalRightColumnHeaderText = rightPricingColumnHeader.innerText;
 
-const pricingColumnNodes = document.querySelectorAll('.pricing__bullet-list');
-const originalColumns = [];
-pricingColumnNodes.forEach((n) => originalColumns.push(n.cloneNode(true)));
-
 function setPricingColumnsBody(product) {
   const columns = document.querySelectorAll('.pricing__bullet-list');
   const leftColumn = columns[0];
@@ -165,7 +161,8 @@ function setPricingColumnsBody(product) {
     const right_leftBulletItems = [
       { icon: 'https://herodevs.github.io/webflow/images/nuxt.png', name: 'Nuxt' },
       { icon: 'https://herodevs.github.io/webflow/images/Vuetify.png', name: 'Vuetify' },
-      { icon: 'https://herodevs.github.io/webflow/images/Quasar.png', name: 'Quasar' },
+      // { icon: 'https://herodevs.github.io/webflow/images/Quasar.png', name: 'Quasar' },
+      { icon: '', name: '' },
     ];
     const right_rightBulletItems = [
       { icon: 'https://herodevs.github.io/webflow/images/BootstrapVue.png', name: 'BootstrapVue' },
@@ -176,12 +173,21 @@ function setPricingColumnsBody(product) {
       return `
         <div class="core-plus-column">
           ${
-            items.map((item) => `
-              <div class="core-plus-cell">
-                <img src="${item.icon}" loading="lazy" width="20" alt="">
-                <span class="pricing__bullet-text">${item.name}</span>
-              </div>
-            `).join('')
+            items.map((item) => {
+              const itemIcon = item.icon ?
+                `<img src="${item.icon}" loading="lazy" width="20" alt="">`:
+                `&nbsp;`;
+              const itemName = item.name ?
+                `<span class="pricing__bullet-text">${item.name}</span>`:
+                ``;
+              const className = item.icon && item.name ? `core-plus-cell`: 'hider';
+              return `
+                  <div class="${className}">
+                    ${itemIcon}
+                    ${itemName}
+                  </div>
+                `;
+              }).join('')
           }
         </div>
       `;
@@ -261,8 +267,13 @@ function setPricingColumnsBody(product) {
             margin: auto !important;
             margin-top: 1em !important;
           }
+
+          .core-plus-column .hider {
+            display: none !important;
+          }
           
           .core-plus-cell {
+            display: block !important;
             border: 1px solid #feeefd !important;
             padding: 15px 5px 5px 9% !important;
           }

@@ -211,7 +211,8 @@ function setPricingColumnsBody(theSelectedProduct) {
     const right_leftBulletItems = [
       { icon: 'https://herodevs.github.io/webflow/images/nuxt.png', name: 'Nuxt' },
       { icon: 'https://herodevs.github.io/webflow/images/Vuetify.png', name: 'Vuetify' },
-      { icon: 'https://herodevs.github.io/webflow/images/Quasar.png', name: 'Quasar' },
+      // { icon: 'https://herodevs.github.io/webflow/images/Quasar.png', name: 'Quasar' },
+      { icon: '', name: '' },
     ];
     const right_rightBulletItems = [
       { icon: 'https://herodevs.github.io/webflow/images/BootstrapVue.png', name: 'BootstrapVue' },
@@ -221,14 +222,23 @@ function setPricingColumnsBody(theSelectedProduct) {
     const getColumn = (items) => {
       return `
         <div class="core-plus-column">
-          ${
-            items.map((item) => `
-              <div class="core-plus-cell">
-                <img src="${item.icon}" loading="lazy" width="20" alt="">
-                <span class="pricing__bullet-text">${item.name}</span>
-              </div>
-            `).join('')
-          }
+        ${
+          items.map((item) => {
+            const itemIcon = item.icon ?
+              `<img src="${item.icon}" loading="lazy" width="20" alt="">`:
+              `&nbsp;`;
+            const itemName = item.name ?
+              `<span class="pricing__bullet-text">${item.name}</span>`:
+              ``;
+            const className = item.icon && item.name ? `core-plus-cell`: 'hider';
+            return `
+                <div class="${className}">
+                  ${itemIcon}
+                  ${itemName}
+                </div>
+              `;
+            }).join('')
+        }
         </div>
       `;
     }
@@ -269,11 +279,9 @@ function setPricingColumnsBody(theSelectedProduct) {
         .core-plus .core-plus-column:first-child .core-plus-cell:first-child {
           border-radius: 5px 0 0 0;
           border-right: 0;
-          border-bottom: 0;
         }
         .core-plus .core-plus-column:first-child .core-plus-cell:last-child {
           border-radius: 0 0 0 5px;
-          border-top: 0;
           border-right: 0;
         }
 
@@ -288,7 +296,6 @@ function setPricingColumnsBody(theSelectedProduct) {
 
         .core-plus .core-plus-column:last-child .core-plus-cell:first-child {
           border-radius: 0 5px 0 0;
-          border-bottom: 0;
         }
 
         @media screen and (max-width: 959px) {
@@ -306,6 +313,10 @@ function setPricingColumnsBody(theSelectedProduct) {
             width: 93% !important;
             margin: auto !important;
             margin-top: 1em !important;
+          }
+
+          .core-plus-column .hider {
+            display: none !important;
           }
           
           .core-plus-cell {
