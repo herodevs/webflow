@@ -19,7 +19,7 @@ $(this).submit(function (e) { // when the form submits
     const parsedFormData = [...formData.entries()].map(dataObject => ({ // convert data to array
         name: dataObject[0], // make sure the name of the input is the same as the hubspot input name
         value: dataObject[1]  // the value of the input
-    }))
+    }));
     
     try {
       if (pricingSelected) {
@@ -40,6 +40,7 @@ $(this).submit(function (e) { // when the form submits
       if (selectedProduct) {
         const products = {
           vue: "NES Vue",
+          nesAngular: 'NES Angular',
           protractor: "NES Protractor",
           boostrap: "NES Bootstrap",
           spring: "NES Spring",
