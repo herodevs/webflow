@@ -1,6 +1,9 @@
 const backButton = document.getElementById('thank-you-go-back');
 
-var html = `
+const calendarDisplayElement = document.getElementById('calendar-display-container');
+const calendarContainer = document.getElementById('calendar-container');
+
+const html = `
   <iframe
     src="https://meetings.hubspot.com/josh-trainque/nes-round-robin"
     frameborder="0"
