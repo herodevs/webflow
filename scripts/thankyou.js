@@ -1,3 +1,5 @@
+const backButton = document.getElementById('thank-you-go-back');
+
 if (!document.referrer) {
   backButton.style.display = 'none';
 } else {
