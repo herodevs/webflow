@@ -126,6 +126,10 @@ $(this).submit(function (e) { // when the form submits
       data: final_data,
       contentType: "application/json",
       success: function (response) {
+        function isOnURL(url) {
+          return !!~window.location.href.indexOf(url);
+        }
+
         if (response) {
           // if response inline, display contents
           if (response.inlineMessage) {
@@ -133,9 +137,9 @@ $(this).submit(function (e) { // when the form submits
             /**
              * page is NOT disclosures
              */
-            if (~window.location.href.indexOf('/support/') && !~window.location.href.indexOf('support/disclosures')) {
+            if ((isOnURL('/support') || isOnURL('/contact') ) && !isOnURL('support/disclosures')) {
               document.location.href = '../thank-you';
-            } else if (~window.location.href.indexOf('support/disclosures')) {
+            } else if (isOnURL('support/disclosures')) {
               /**
                * page IS disclosures
                */
