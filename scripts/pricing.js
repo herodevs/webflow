@@ -777,15 +777,11 @@ function showCalendar() {
     <iframe
       src="https://meetings.hubspot.com/josh-trainque/nes-round-robin"
       frameborder="0"
-      style="width: 100%; height: 100%; min-height: 730px"
+      style="width: 100%; height: 100%; min-height: 760px"
     />
   `;
-
-  const innerHeight = '950px';
+	
   calendarContainer.style.display = 'block';
-  calendarContainer.style.minHeight = innerHeight;
-  modalParts.card.style.minHeight = '1100px';
-  step3.style.minHeight = innerHeight;
 
   // this is a test
   setTimeout(() => {
