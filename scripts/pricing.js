@@ -63,7 +63,6 @@ const errorChild = document.getElementById('error-message');
 const errorMessage = (errorChild || { parentElement: { style: { display: 'none' } } }).parentElement;
 const productLabel = document.getElementById('product-label');
 const seatsInput = document.getElementById('seats');
-seatsInput.type = 'number';
 
 const errorMessageStep2 = document.getElementById('error-message-s2');
 const successMessageStep2 = document.getElementById('success-message-s2');
@@ -499,19 +498,16 @@ document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
 
 renderPricing()
 
-firstNameInput.placeholder = 'Enter your first name';
-lastNameInput.placeholder = 'Enter your last name';
-phoneInput.placeholder = 'Enter phone number';
-companyInput.placeholder = 'Enter company name';
-emailInput.placeholder = 'Enter company email';
+// Set seats validations
 seatsInput.value = 0;
+seatsInput.min = 1;
 
 const TOTAL_STEPS = 3;
 
 const products = {
   angular: 'AngularJS',
   'NES Angular': 'NES Angular',
-  vue: 'NES Vue2', 
+  vue: 'NES Vue2',
   protractor: 'NES Protractor'
 }
 
@@ -812,7 +808,9 @@ function verifyStep1() {
 }
 
 function verifyStep2() {
-  const formReady = !!seatsInput.value;
+  const numberOfSeats = parseInt(seatsInput.value);
+
+  const formReady = numberOfSeats >= 1;
   if (!formReady) {
     errorMessageStep2.style.display = 'block';
     errorMessageStep2.firstChild.textContent = 'Please select the number of seats 💺';
