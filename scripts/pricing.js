@@ -793,8 +793,8 @@ function showCalendar() {
 function verifyStep1() {
   const formReady = !!firstNameInput.value &&
     !!lastNameInput.value &&
-    !!emailInput.value; // &&
-    // !!phoneInput.value;
+    !!emailInput.value &&
+    !!phoneInput.value;
     // !!companyInput.value;
 
   if (!formReady) {
