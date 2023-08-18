@@ -59,10 +59,16 @@ function calculateCountDownTime(targetDate) {
 }
 
 function updateView(timeLeft, labels) {
-  Object.values(timeLeft).forEach((date, index) => {
-    const label = labels[index];
-    label.textContent = date;
-  });
+  Object.values(timeLeft)
+    .map(number => {
+      const numberStr = number.toString();
+
+      return numberStr.length === 1 ? `0${numberStr}` : numberStr;
+    })
+    .forEach((date, index) => {
+      const label = labels[index];
+      label.textContent = date;
+    });
 }
 
 function updateCountdown(targetDate) {
