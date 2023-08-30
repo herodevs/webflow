@@ -1,6 +1,3 @@
-const servicesToggle = document.querySelector('#services-toggle')
-const productsToggle = document.querySelector('#products-toggle')
-
 const angularToggle = document.querySelector('#angular-toggle')
 const nesAngularToggle = document.querySelector('#nes-angular-toggle');
 const vueToggle = document.querySelector('#vue-toggle')
@@ -13,7 +10,6 @@ const enterpriseDesc = document.querySelector('#enterprise-description')
 
 const categoryPricingSection = document.querySelector('#category-pricing')
 const nesProductSelectro = document.querySelector('#nes-product-selector')
-const servicesCallToAction = document.querySelector('#services-call-to-action')
 
 const MODAL_BACKDROP = '.modal-backdrop';
 const PRICING_MODAL = 'pricing-calculator-modal';
@@ -49,9 +45,21 @@ const modalParts = {
   card: pricingModalCard
 };
 
+var PRODUCTS = {
+  angular: 'angular',
+  nesAngular: 'nesAngular',
+  vue: 'vue',
+  protractor: 'protractor',
+}
+var PRODUCTS_NAME = {
+  [PRODUCTS.angular]: 'AngularJS',
+  [PRODUCTS.nesAngular]: 'NES Angular',
+  [PRODUCTS.vue]: 'NES Vue2',
+  [PRODUCTS.protractor]: 'NES Protractor'
+}
+
 const progressBar = document.getElementById('pricing-progress-bar');
 const progress = (progressBar || { firstChild: { style: { width: '0px' }} }).firstChild;
-const productSelectedLabel = document.getElementById('product-selected');
 
 const firstNameInput = document.getElementById('firstname');
 const lastNameInput = document.getElementById('lastname');
@@ -91,9 +99,6 @@ const priceInfo = document.getElementById('pricing-info');
 
 submitButton.type = 'submit'
 
-let selectedCategory = 'products'
-let selectedProduct = 'vue'
-
 const toggle = {
     on: {
         button: 'toggle--active',
@@ -127,11 +132,11 @@ const VUE_ENTERPRISE = ANGULAR_ENTERPRISE;
 const VUE_DESC_CORP = ANGULAR_DESC_CORP;
 const VUE_DESC_ENTERPRISE = ANGULAR_DESC_ENTERPRISE;
 
-const PROTRACTOR_CORP = ANGULAR_CORP;
-const PROTRACTOR_ENTERPRISE = ANGULAR_ENTERPRISE;
+const PROTRACTOR_CORP = 'Free through Aug 2024';
+const PROTRACTOR_ENTERPRISE = PROTRACTOR_CORP;
 
-const PROTRACTOR_DESC_CORP = ANGULAR_DESC_CORP;
-const PROTRACTOR_DESC_ENTERPRISE = ANGULAR_DESC_ENTERPRISE;
+const PROTRACTOR_DESC_CORP = '';
+const PROTRACTOR_DESC_ENTERPRISE = '';
 
 const leftPricingColumnHeader = document.getElementById('left-column-header');
 const originalLeftColumnHeaderText = leftPricingColumnHeader.innerText;
@@ -143,7 +148,8 @@ function setPricingColumnsBody(product) {
   const columns = document.querySelectorAll('.pricing__bullet-list');
   const leftColumn = columns[0];
   const rightColumn = columns[1];
-  if (product === 'vue') {
+
+  if (product === PRODUCTS.vue) {
     const leftBullets = [
       'Continuous vulnerability scanning',
       'Modern browser compatibility',
@@ -321,179 +327,145 @@ function setPricingColumnsBody(product) {
       column.innerHTML = originalColumns[i].innerHTML;
     });
   }
-  //
 }
 
-function renderPricing() {
-    if (selectedCategory === 'services') {
-      servicesToggle.className = toggle.on.button
-      servicesToggle.firstChild.className = toggle.on.text
-      
-      productsToggle.className = toggle.off.button
-      productsToggle.firstChild.className = toggle.off.text
-      
-      categoryPricingSection.style.display = 'none'
-      nesProductSelectro.style.display = 'none'
-      servicesCallToAction.style.display = 'block'
-    }
+function renderPricing(product) {
+  selectNESProduct(product)
 
-    if (selectedCategory === 'products') {
-      servicesToggle.className = toggle.off.button
-      servicesToggle.firstChild.className = toggle.off.text
-      
-      productsToggle.className = toggle.on.button
-      productsToggle.firstChild.className = toggle.on.text
-      
-      categoryPricingSection.style.display = 'block'
-      nesProductSelectro.style.display = 'block'
-      servicesCallToAction.style.display = 'none'
-    }
-
-    if (selectedProduct === 'angular') {
+  switch (product) {
+    case PRODUCTS.angular:
       leftPricingColumnHeader.innerText = originalLeftColumnHeaderText;
       rightPricingColumnHeader.innerText = originalRightColumnHeaderText;
 
-      angularToggle.className = toggle.nes.on.button
-      angularToggle.firstChild.className = toggle.nes.on.text
-      
-      vueToggle.className = toggle.nes.off.button
-      vueToggle.firstChild.className = toggle.nes.off.text
-      
-      protractorToggle.className = toggle.nes.off.button
-      protractorToggle.firstChild.className = toggle.nes.off.text
-      
       corpPrice.innerText = ANGULAR_CORP
       enterprisePrice.innerText = ANGULAR_ENTERPRISE
       corpDesc.innerText = ANGULAR_DESC_CORP
       enterpriseDesc.innerText = ANGULAR_DESC_ENTERPRISE
 
-      if (nesAngularToggle) {
-        nesAngularToggle.className = toggle.nes.off.button
-        nesAngularToggle.firstChild.className = toggle.nes.off.text
-      }
-
       document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
         btn.textContent = 'Talk to Sales'
       });
-    }
+      break;
 
-    if (selectedProduct === 'vue') {
+    case PRODUCTS.nesAngular:
+      leftPricingColumnHeader.innerText = originalLeftColumnHeaderText;
+      rightPricingColumnHeader.innerText = originalRightColumnHeaderText;
+
+      corpPrice.innerText = ANGULAR_CORP
+      corpDesc.innerText = ANGULAR_DESC_CORP
+      enterprisePrice.innerText = ANGULAR_ENTERPRISE
+      enterpriseDesc.innerText = ANGULAR_DESC_ENTERPRISE
+
+      document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
+        btn.textContent = 'Get a Custom Quote';
+      })
+      break;
+
+    case PRODUCTS.protractor:
+      leftPricingColumnHeader.innerText = originalLeftColumnHeaderText;
+      rightPricingColumnHeader.innerText = originalRightColumnHeaderText;
+
+      corpPrice.innerText = PROTRACTOR_CORP
+      corpDesc.innerText = PROTRACTOR_DESC_CORP
+      enterprisePrice.innerText = PROTRACTOR_ENTERPRISE
+      enterpriseDesc.innerText = PROTRACTOR_DESC_ENTERPRISE
+
+      document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
+        btn.textContent = 'Get a Free License';
+      })
+      break;
+
+    case PRODUCTS.vue:
       leftPricingColumnHeader.innerText = 'Core';
       rightPricingColumnHeader.innerText = 'Core + Essentials';
 
-      angularToggle.className = toggle.nes.off.button
-      angularToggle.firstChild.className = toggle.nes.off.text
-      
-      vueToggle.className = toggle.nes.on.button
-      vueToggle.firstChild.className = toggle.nes.on.text
-      
-      protractorToggle.className = toggle.nes.off.button
-      protractorToggle.firstChild.className = toggle.nes.off.text
-      
       corpPrice.innerText = VUE_CORP
       enterprisePrice.innerText = VUE_ENTERPRISE
       corpDesc.innerText = VUE_DESC_CORP
       enterpriseDesc.innerText = VUE_DESC_ENTERPRISE;
 
-      if (nesAngularToggle) {
-        nesAngularToggle.className = toggle.nes.off.button
-        nesAngularToggle.firstChild.className = toggle.nes.off.text
-      }
-
       document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
           btn.textContent = 'Get a Custom Quote'
       })
-    }
+      break;
+  }
 
-    if (selectedProduct === 'protractor' || selectedProduct === 'nesAngular') {
-      leftPricingColumnHeader.innerText = originalLeftColumnHeaderText;
-      rightPricingColumnHeader.innerText = originalRightColumnHeaderText;
-
-      angularToggle.className = toggle.nes.off.button
-      angularToggle.firstChild.className = toggle.nes.off.text
-      
-      vueToggle.className = toggle.nes.off.button
-      vueToggle.firstChild.className = toggle.nes.off.text
-      if (selectedProduct === 'protractor') {
-        protractorToggle.className = toggle.nes.on.button;
-        protractorToggle.firstChild.className = toggle.nes.on.text;
-        nesAngularToggle.className = toggle.nes.off.button
-        nesAngularToggle.firstChild.className = toggle.nes.off.text
-      } else if (selectedProduct === 'nesAngular' && nesAngularToggle) {
-        nesAngularToggle.className = toggle.nes.on.button
-        nesAngularToggle.firstChild.className = toggle.nes.on.text
-        protractorToggle.className = toggle.nes.off.button;
-        protractorToggle.firstChild.className = toggle.nes.off.text;
-      }
-      
-      corpPrice.innerText = PROTRACTOR_CORP
-      enterprisePrice.innerText = PROTRACTOR_ENTERPRISE
-      corpDesc.innerText = PROTRACTOR_DESC_CORP
-      enterpriseDesc.innerText = PROTRACTOR_DESC_ENTERPRISE
-
-      document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
-        btn.textContent = 'Get a Custom Quote';
-      })
-    }
-    setPricingColumnsBody(selectedProduct);
+  setPricingColumnsBody(product);
 }
 
-servicesToggle.addEventListener('click', () => {
-  selectedCategory = 'services'
-  renderPricing()
-})
+let selectedProduct = PRODUCTS.vue
 
-productsToggle.addEventListener('click', () => {
-  selectedCategory = 'products'
-  renderPricing()
-})
+nesAngularToggle.addEventListener('click', NESProductClick(PRODUCTS.nesAngular))
+angularToggle.addEventListener('click', NESProductClick(PRODUCTS.angular))
+vueToggle.addEventListener('click', NESProductClick(PRODUCTS.vue))
+protractorToggle.addEventListener('click', NESProductClick(PRODUCTS.protractor))
 
-if (nesAngularToggle) {
-  nesAngularToggle.addEventListener('click', () => {
-    selectedProduct = 'nesAngular';
-    renderPricing();
-  });
+function NESProductClick (product) {
+  return () => {
+    selectedProduct = product
+    renderPricing(product)
+  }
 }
 
-angularToggle.addEventListener('click', () => {
-  selectedProduct = 'angular'
-  renderPricing()
-})
-vueToggle.addEventListener('click', () => {
-  selectedProduct = 'vue'
-  renderPricing()
-})
-protractorToggle.addEventListener('click', () => {
-  selectedProduct = 'protractor'
-  renderPricing()
-})
+function selectNESProduct(selectedProduct) {
+  angularToggle.className = toggle.nes.off.button
+  angularToggle.firstChild.className = toggle.nes.off.text
+  
+  vueToggle.className = toggle.nes.off.button
+  vueToggle.firstChild.className = toggle.nes.off.text
+  
+  protractorToggle.className = toggle.nes.off.button
+  protractorToggle.firstChild.className = toggle.nes.off.text
+  
+  nesAngularToggle.className = toggle.nes.off.button
+  nesAngularToggle.firstChild.className = toggle.nes.off.text
+
+
+  switch(selectedProduct) {
+    case PRODUCTS.angular:
+      angularToggle.className = toggle.nes.on.button
+      angularToggle.firstChild.className = toggle.nes.on.text
+      break;
+    
+    case PRODUCTS.nesAngular:
+      nesAngularToggle.className = toggle.nes.on.button
+      nesAngularToggle.firstChild.className = toggle.nes.on.text
+      break;
+    
+    case PRODUCTS.protractor:
+      protractorToggle.className = toggle.nes.on.button
+      protractorToggle.firstChild.className = toggle.nes.on.text
+      break;
+    
+    case PRODUCTS.vue:
+      vueToggle.className = toggle.nes.on.button
+      vueToggle.firstChild.className = toggle.nes.on.text
+      break;
+  }
+}
 
 let showModal = false;
-let pricingSelected = null;
-
 
 document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
-    btn.addEventListener('click',() => {
-        pricingSelected = btn.id;
-				if (selectedProduct === 'angular') {
-					window.open("https://xlts.dev/contact-us?referral=herodevs");
-				} else {
-          modalParts.backdrop.style.display = 'block';
-          modalParts.card.style.display = 'inline-block';
-          modalParts.modal.display = 'block';
-          switch (selectedProduct) {
-            case 'vue': 
-              addOrUpdateURLParams({ 'pricing_step': '1', product: 'vue' });
-              break;
-            case 'protractor': 
-              addOrUpdateURLParams({ 'pricing_step': '1', product: 'protractor' });
-              break;
-            case 'nesAngular':
-              addOrUpdateURLParams({ 'pricing_step': '1', product: 'NES Angular' });
-              break;
-          }
-				}
-    })
+  btn.addEventListener('click',() => {
+    switch(selectedProduct) {
+      case PRODUCTS.angular:
+        window.open("https://xlts.dev/contact-us?referral=herodevs");
+        break;
+
+      case PRODUCTS.protractor:
+        location.href = `${window.location.origin}/support/nes-protractor#contact-us`
+      break;
+
+      default:
+        modalParts.backdrop.style.display = 'block';
+        modalParts.card.style.display = 'inline-block';
+        modalParts.modal.display = 'block';
+
+        addOrUpdateURLParams({ 'pricing_step': '1', product: selectedProduct });
+      break;
+    }
+  })
 })
 
 renderPricing()
@@ -503,13 +475,6 @@ seatsInput.value = 0;
 seatsInput.min = 1;
 
 const TOTAL_STEPS = 3;
-
-const products = {
-  angular: 'AngularJS',
-  'NES Angular': 'NES Angular',
-  vue: 'NES Vue2',
-  protractor: 'NES Protractor'
-}
 
 const searchParams = getCurrentParams();
 const initialParams = getCurrentParamsObject();
@@ -601,20 +566,17 @@ function formatPrice(number) {
 
 
 function renderStep(params) {
-  const pricingStep = params['pricing_step'];
-  const productSelected = params['product'];
+  const pricingStep = params.pricing_step;
+  const productSelected = params.product;
 
   if (!pricingStep) {
       renderModal(false)
       return;
   }
 
-  const selectedProductText = products[productSelected];
+  const selectedProductText = PRODUCTS_NAME[productSelected];
   if (selectedProductText) {
-      productSelectedLabel.textContent = selectedProductText;
       productLabel.textContent = selectedProductText;
-  } else { 
-      productSelectedLabel.textContent = 'Select a Product'
   }
   
   renderModal(true);
@@ -867,3 +829,4 @@ scheduleCallButton.addEventListener('click', () => {
   addOrUpdateURLParams({ 'pricing_step': '4' });
 });
 
+NESProductClick(PRODUCTS.vue)()
