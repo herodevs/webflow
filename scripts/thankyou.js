@@ -1,7 +1,8 @@
 const backButton = document.getElementById('thank-you-go-back');
 
-const calendarDisplayElement = document.getElementById('calendar-display-container');
-const calendarContainer = document.getElementById('calendar-container');
+const calendarDisplayElement = document.getElementById(
+  'calendar-display-container'
+);
 
 const html = `
   <iframe
@@ -10,9 +11,7 @@ const html = `
     style="width: 100%; height: 100%; min-height: 730px"
   />
 `;
-calendarContainer.innerHTML = html;
-calendarDisplayElement.innerHTML = calendarContainer.innerHTML;
-
+calendarDisplayElement.innerHTML = html;
 
 if (!document.referrer) {
   backButton.style.display = 'none';
