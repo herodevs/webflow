@@ -1,56 +1,63 @@
-const IS_PRODUCTION = window.location.href.indexOf('www.herodevs.com') > 0 ? true : false;
+const IS_PRODUCTION =
+  window.location.href.indexOf('www.herodevs.com') > 0 ? true : false;
 
 if (IS_PRODUCTION) {
   window.LogRocket && window.LogRocket.init('9cf0rr/herodevs-website');
-  window.LogRocket && window.LogRocket.getSessionURL(function (sessionURL) {
-    window.analytics && window.analytics.track('LogRocket', {
-      sessionURL: sessionURL,
+  window.LogRocket &&
+    window.LogRocket.getSessionURL(function (sessionURL) {
+      window.analytics &&
+        window.analytics.track('LogRocket', {
+          sessionURL: sessionURL,
+        });
     });
-  });
 }
 
-$('form[action^="https://api.hsforms.com"]').each(function (i) { // intercept forms whos action goes to hubspot
-$(this).find("input[type=checkbox]").val("true")
-$(this).submit(function (e) { // when the form submits
-    e.preventDefault() //stop the form from submitting to webflow
+$('form[action^="https://api.hsforms.com"]').each(function (i) {
+  // intercept forms whos action goes to hubspot
+  $(this).find('input[type=checkbox]').val('true');
+  $(this).submit(function (e) {
+    // when the form submits
+    e.preventDefault(); //stop the form from submitting to webflow
     console.log({ target: e.target });
-    const formData = new FormData(e.target) // get the form data
-    console.log({ formData: formData.entries() })
-    const parsedFormData = [...formData.entries()].map(dataObject => ({ // convert data to array
-        name: dataObject[0], // make sure the name of the input is the same as the hubspot input name
-        value: dataObject[1]  // the value of the input
+    const formData = new FormData(e.target); // get the form data
+    console.log({ formData: formData.entries() });
+    const parsedFormData = [...formData.entries()].map(dataObject => ({
+      // convert data to array
+      name: dataObject[0], // make sure the name of the input is the same as the hubspot input name
+      value: dataObject[1], // the value of the input
     }));
-    
+
     try {
       if (pricingSelected) {
         let plan = pricingSelected;
-        if (selectedProduct && selectedProduct === 'vue'){ 
-          plan = pricingSelected.toLowerCase().trim() === 'corporate' ?
-            'Core':
-            'Core + Essentials';
+        if (selectedProduct && selectedProduct === 'vue') {
+          plan =
+            pricingSelected.toLowerCase().trim() === 'corporate'
+              ? 'Core'
+              : 'Core + Essentials';
         }
         const extraData = { name: 'plan', value: plan };
-        parsedFormData.push(extraData)
+        parsedFormData.push(extraData);
       }
     } catch (err) {
       console.log('We have no pricingSelected on this page.');
     }
-  
+
     try {
       if (selectedProduct) {
         const products = {
-          vue: "NES Vue",
+          vue: 'NES Vue',
           nesAngular: 'NES Angular',
-          protractor: "NES Protractor",
-          boostrap: "NES Bootstrap",
-          spring: "NES Spring",
-          drupal: "NES Drupal",
-          something: "Something Else",
-          endbridge: "Endbridge",
-          other: "Other",
-        }
+          protractor: 'NES Protractor',
+          boostrap: 'NES Bootstrap',
+          spring: 'NES Spring',
+          drupal: 'NES Drupal',
+          something: 'Something Else',
+          endbridge: 'Endbridge',
+          other: 'Other',
+        };
         const productValueName = products[selectedProduct];
-        console.log({ productValueName })
+        console.log({ productValueName });
         const extraData = { name: 'product_interest', value: productValueName };
         parsedFormData.push(extraData);
       }
@@ -61,7 +68,7 @@ $(this).submit(function (e) { // when the form submits
     console.log(parsedFormData);
 
     const formDataAsObject = parsedFormData.reduce((acc, current) => {
-      let newAcc = {...acc }
+      let newAcc = { ...acc };
       newAcc[current.name] = current.value;
       return newAcc;
     }, {});
@@ -74,28 +81,59 @@ $(this).submit(function (e) { // when the form submits
         // Add your own custom user variables here
         company: formDataAsObject.company,
         phone: formDataAsObject.phone,
-        plan: formDataAsObject.plan
+        plan: formDataAsObject.plan,
       });
     }
 
-    const goToWebinarWebinarKey = parsedFormData.find(input => input.name === 'goToWebinarWebinarKey')?.value // looks for an input with the name goToWebinarWebinarKey
-    const sfdcCampaignId = parsedFormData.find(input => input.name === 'sfdcCampaignId')?.value// looks for an input with the name sfdcCampaignId
-    const hutk = document.cookie.replace(/(?:(?:^|.*;\s*)hubspotutk\s*\=\s*([^;]*).*$)|^.*$/, "$1") || undefined // looks for an input with the name hutk, the hubspot user token
+    const goToWebinarWebinarKey = parsedFormData.find(
+      input => input.name === 'goToWebinarWebinarKey'
+    )?.value; // looks for an input with the name goToWebinarWebinarKey
+    const sfdcCampaignId = parsedFormData.find(
+      input => input.name === 'sfdcCampaignId'
+    )?.value; // looks for an input with the name sfdcCampaignId
+    const hutk =
+      document.cookie.replace(
+        /(?:(?:^|.*;\s*)hubspotutk\s*\=\s*([^;]*).*$)|^.*$/,
+        '$1'
+      ) || undefined; // looks for an input with the name hutk, the hubspot user token
     //console.log(hutk)
-    const processingPrompt = $(this).find("[id*='gdpr-processing-prompt']")// looks for an element with the id gdpr-processing-prompt
+    const processingPrompt = $(this).find("[id*='gdpr-processing-prompt']"); // looks for an element with the id gdpr-processing-prompt
     const communicationConsent = parsedFormData
-      .filter(item => item.name.includes('LEGAL_CONSENT')).map(item => { // finds LEGAL_CONSENT options and stores them
-        const element = $(`#${item.name.replace(/(:|\.|\[|\]|,|=|@)/g, "\\$1")}`)[0] // checks if they've checked the checkbox to consent
-        const label = $("span[for='" + $(element).attr('id').replace(/(:|\.|\[|\]|,|=|@)/g, "\\$1") + "']") // gets the label of the checkbox
+      .filter(item => item.name.includes('LEGAL_CONSENT'))
+      .map(item => {
+        // finds LEGAL_CONSENT options and stores them
+        const element = $(
+          `#${item.name.replace(/(:|\.|\[|\]|,|=|@)/g, '\\$1')}`
+        )[0]; // checks if they've checked the checkbox to consent
+        const label = $(
+          "span[for='" +
+            $(element)
+              .attr('id')
+              .replace(/(:|\.|\[|\]|,|=|@)/g, '\\$1') +
+            "']"
+        ); // gets the label of the checkbox
         return {
-            value: element.checked,
-            text: label.text(),
-            subscriptionTypeId: parseInt(item.name.split("LEGAL_CONSENT.subscription_type_")[1]) // the subscription the user is consenting to
-        }
-      })
-    const ignoredFields = ["cc-num", "cc-number", "gdpr", "LEGAL_CONSENT", "goToWebinarWebinarKey", "sfdcCampaignId"]
-    const data = { // the data we send to hubspot
-      fields: parsedFormData.filter(item => !ignoredFields.find(ignoredField => item.name.includes(ignoredField))), // set the form data but ignore certain fields
+          value: element.checked,
+          text: label.text(),
+          subscriptionTypeId: parseInt(
+            item.name.split('LEGAL_CONSENT.subscription_type_')[1]
+          ), // the subscription the user is consenting to
+        };
+      });
+    const ignoredFields = [
+      'cc-num',
+      'cc-number',
+      'gdpr',
+      'LEGAL_CONSENT',
+      'goToWebinarWebinarKey',
+      'sfdcCampaignId',
+    ];
+    const data = {
+      // the data we send to hubspot
+      fields: parsedFormData.filter(
+        item =>
+          !ignoredFields.find(ignoredField => item.name.includes(ignoredField))
+      ), // set the form data but ignore certain fields
       context: {
         pageUri: window.location.href, // log the current url
         pageName: document.title, // log the pages title
@@ -103,28 +141,34 @@ $(this).submit(function (e) { // when the form submits
         goToWebinarKey: goToWebinarWebinarKey, // go to meeting key
         hutk: hutk, // hubspot user token
       },
-      ...(!processingPrompt) ? {} : {
-        legalConsentOptions: {
-          consent: {
-            ...(!processingPrompt) ? {} : {
-              consentToProcess: true,
-              text: processingPrompt.text(),
+      ...(!processingPrompt
+        ? {}
+        : {
+            legalConsentOptions: {
+              consent: {
+                ...(!processingPrompt
+                  ? {}
+                  : {
+                      consentToProcess: true,
+                      text: processingPrompt.text(),
+                    }),
+                ...(!communicationConsent
+                  ? {}
+                  : {
+                      communications: communicationConsent,
+                    }),
+              },
             },
-            ...(!communicationConsent) ? {} : {
-              communications: communicationConsent
-            }
-          }
-        }
-      }
+          }),
     };
 
     const final_data = JSON.stringify(data); // turn that javascript object into a json string
 
     $.ajax({
       url: e.target.action,
-      method: "POST",
+      method: 'POST',
       data: final_data,
-      contentType: "application/json",
+      contentType: 'application/json',
       success: function (response) {
         function isOnURL(url) {
           return !!~window.location.href.indexOf(url);
@@ -133,50 +177,58 @@ $(this).submit(function (e) { // when the form submits
         if (response) {
           // if response inline, display contents
           if (response.inlineMessage) {
-
             /**
              * page is NOT disclosures
              */
-            if ((isOnURL('/support') || isOnURL('/contact') ) && !isOnURL('support/disclosures')) {
+            if (
+              (isOnURL('/support') || isOnURL('/contact')) &&
+              !isOnURL('support/disclosures')
+            ) {
               document.location.href = '../thank-you';
             } else if (isOnURL('support/disclosures')) {
               /**
                * page IS disclosures
                */
               const parent = $(e.target).parent();
-              parent.children("form").css("display", "none"); // hide form
+              parent.children('form').css('display', 'none'); // hide form
               let ms = 5000;
-              const reset = function(seconds) { 
-                return '<p>Resetting form in ' + seconds + ' seconds</p>'
-              }
-              parent.children(".w-form-done").css("display", "block").html(response.inlineMessage + reset(ms/1000));
-  
-              const interval = setInterval(function() {
+              const reset = function (seconds) {
+                return '<p>Resetting form in ' + seconds + ' seconds</p>';
+              };
+              parent
+                .children('.w-form-done')
+                .css('display', 'block')
+                .html(response.inlineMessage + reset(ms / 1000));
+
+              const interval = setInterval(function () {
                 if (ms === 1000) {
                   window.location.reload();
                   return clearInterval(interval);
                 }
-                ms = ms - 1000
-                const message = response.inlineMessage + reset(ms/1000);
-                parent.children(".w-form-done").html(message);
+                ms = ms - 1000;
+                const message = response.inlineMessage + reset(ms / 1000);
+                parent.children('.w-form-done').html(message);
               }, 1000);
             }
           }
         } else {
-          console.log('response but no inlineMessage or redirectUri')
+          console.log('response but no inlineMessage or redirectUri');
         }
       },
       error: function () {
-        console.log("error on the form submitting")
-        $(e.target).css('display', 'none').siblings('.w-form-fail').css('display', 'block') // replace .w-form-fail with your own form done section
-      }
+        console.log('error on the form submitting');
+        $(e.target)
+          .css('display', 'none')
+          .siblings('.w-form-fail')
+          .css('display', 'block'); // replace .w-form-fail with your own form done section
+      },
     });
   });
 });
 
 const pricingColumnNodes = document.querySelectorAll('.pricing__bullet-list');
 const originalColumns = [];
-pricingColumnNodes.forEach((n) => originalColumns.push(n.cloneNode(true)));
+pricingColumnNodes.forEach(n => originalColumns.push(n.cloneNode(true)));
 
 function setPricingColumnsBody(theSelectedProduct) {
   const columns = document.querySelectorAll('.pricing__bullet-list');
@@ -186,51 +238,67 @@ function setPricingColumnsBody(theSelectedProduct) {
     const leftBullets = [
       'Continuous vulnerability scanning',
       'Modern browser compatibility',
-      '14-day critical patch SLA'
-    ].map((bullet) => {
+      '14-day critical patch SLA',
+    ].map(bullet => {
       return `
         <div class="bullet-container">
           <img src="https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg" loading="lazy" width="20" alt="" class="pricing-checkmark">
           <div class="pricing__bullet-text">${bullet}</div>
         </div>
-      `
-    })
-    leftColumn.innerHTML = leftBullets.join('')
-    
+      `;
+    });
+    leftColumn.innerHTML = leftBullets.join('');
+
     const right_leftBulletItems = [
-      { icon: 'https://herodevs.github.io/webflow/images/nuxt.png', name: 'Nuxt' },
-      { icon: 'https://herodevs.github.io/webflow/images/Vuetify.png', name: 'Vuetify' },
+      {
+        icon: 'https://herodevs.github.io/webflow/images/nuxt.png',
+        name: 'Nuxt',
+      },
+      {
+        icon: 'https://herodevs.github.io/webflow/images/Vuetify.png',
+        name: 'Vuetify',
+      },
       // { icon: 'https://herodevs.github.io/webflow/images/Quasar.png', name: 'Quasar' },
       { icon: '', name: '' },
     ];
     const right_rightBulletItems = [
-      { icon: 'https://herodevs.github.io/webflow/images/BootstrapVue.png', name: 'BootstrapVue' },
-      { icon: 'https://herodevs.github.io/webflow/images/vuejs.png', name: 'Vue Router' },
-      { icon: 'https://herodevs.github.io/webflow/images/vuejs.png', name: 'Vuex' },
+      {
+        icon: 'https://herodevs.github.io/webflow/images/BootstrapVue.png',
+        name: 'BootstrapVue',
+      },
+      {
+        icon: 'https://herodevs.github.io/webflow/images/vuejs.png',
+        name: 'Vue Router',
+      },
+      {
+        icon: 'https://herodevs.github.io/webflow/images/vuejs.png',
+        name: 'Vuex',
+      },
     ];
-    const getColumn = (items) => {
+    const getColumn = items => {
       return `
         <div class="core-plus-column">
-        ${
-          items.map((item) => {
-            const itemIcon = item.icon ?
-              `<img src="${item.icon}" loading="lazy" width="20" alt="">`:
-              `&nbsp;`;
-            const itemName = item.name ?
-              `<span class="pricing__bullet-text">${item.name}</span>`:
-              ``;
-            const className = item.icon && item.name ? `core-plus-cell`: 'hider';
+        ${items
+          .map(item => {
+            const itemIcon = item.icon
+              ? `<img src="${item.icon}" loading="lazy" width="20" alt="">`
+              : `&nbsp;`;
+            const itemName = item.name
+              ? `<span class="pricing__bullet-text">${item.name}</span>`
+              : ``;
+            const className =
+              item.icon && item.name ? `core-plus-cell` : 'hider';
             return `
                 <div class="${className}">
                   ${itemIcon}
                   ${itemName}
                 </div>
               `;
-            }).join('')
-        }
+          })
+          .join('')}
         </div>
       `;
-    }
+    };
 
     rightColumn.innerHTML = `
       <style>
@@ -346,10 +414,14 @@ function setPricingColumnsBody(theSelectedProduct) {
       </div>
 
     `;
-    const parent = document.querySelector('.core-plus-bullet').parentElement.parentElement;
+    const parent =
+      document.querySelector('.core-plus-bullet').parentElement.parentElement;
     const parentClasses = parent.getAttribute('class');
     if (!~parentClasses.indexOf('core-plus-parent-container')) {
-      parent.setAttribute('class', parentClasses + ' ' + 'core-plus-parent-container');
+      parent.setAttribute(
+        'class',
+        parentClasses + ' ' + 'core-plus-parent-container'
+      );
     }
   } else {
     pricingColumnNodes.forEach((column, i) => {
@@ -360,7 +432,9 @@ function setPricingColumnsBody(theSelectedProduct) {
 }
 if (~window.location.href.indexOf('support/nes-vue')) {
   const leftPricingColumnHeader = document.getElementById('left-column-header');
-  const rightPricingColumnHeader = document.getElementById('right-column-header');
+  const rightPricingColumnHeader = document.getElementById(
+    'right-column-header'
+  );
   leftPricingColumnHeader.innerText = 'Core';
   rightPricingColumnHeader.innerText = 'Core + Essentials';
   setPricingColumnsBody('vue');
@@ -376,7 +450,7 @@ if (~window.location.href.indexOf('support/nes-vue')) {
   // Set sentinel on body after the navbar
   const sentinel = (function putSentinel(debugMode) {
     const sentinelElement = generateSentinelElement();
-    insertBefore(sentinelElement, navbar)
+    insertBefore(sentinelElement, navbar);
 
     return sentinelElement;
 
@@ -386,27 +460,24 @@ if (~window.location.href.indexOf('support/nes-vue')) {
       sentinelEl.style.width = '100%';
       sentinelEl.style.position = 'absolute';
       sentinelEl.style.visibility = 'hidden';
-  
+
       if (debugMode) {
         sentinelEl.style.backgroundColor = 'rgba(255, 0, 0, 0.5)';
         sentinelEl.style.visibility = 'unset';
         sentinelEl.style.zIndex = 10000000;
       }
-  
+
       return sentinelEl;
     }
 
     function insertBefore(el, referenceNode) {
       referenceNode.parentNode.insertBefore(el, referenceNode);
     }
-  })()
+  })();
 
-  const observer = new IntersectionObserver(
-    records => onAppears(records),
-    {
-      threshold: [0, 1],
-    }
-  );
+  const observer = new IntersectionObserver(records => onAppears(records), {
+    threshold: [0, 1],
+  });
 
   observer.observe(sentinel);
 
@@ -418,7 +489,7 @@ if (~window.location.href.indexOf('support/nes-vue')) {
     }
   }
 
-  function createStuckCSSClass () {
+  function createStuckCSSClass() {
     const stuckStyle = document.createElement('style');
     stuckStyle.innerHTML = `
       .stuck [data-hide-when-stuck] { 
@@ -427,4 +498,4 @@ if (~window.location.href.indexOf('support/nes-vue')) {
     `;
     document.getElementsByTagName('head')[0].appendChild(stuckStyle);
   }
-})()
+})();
