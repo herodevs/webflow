@@ -1,3 +1,5 @@
+var selectedProduct;
+
 (function () {
   const angularToggle = document.querySelector('#angular-toggle');
   const nesAngularToggle = document.querySelector('#nes-angular-toggle');
@@ -482,7 +484,7 @@
     setPricingColumnsBody(product);
   }
 
-  let selectedProduct = PRODUCTS.vue;
+  selectedProduct = PRODUCTS.vue;
 
   nesAngularToggle.addEventListener(
     'click',
