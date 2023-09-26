@@ -1,4 +1,5 @@
 var selectedProduct;
+var pricingSelected;
 
 (function () {
   const angularToggle = document.querySelector('#angular-toggle');
@@ -564,7 +565,9 @@ var selectedProduct;
   let showModal = false;
 
   document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', event => {
+      pricingSelected = event.target.getAttribute('data-nes-plan');
+
       switch (selectedProduct) {
         case PRODUCTS.angular:
           window.open('https://xlts.dev/contact-us?referral=herodevs');

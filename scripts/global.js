@@ -30,12 +30,14 @@ $('form[action^="https://api.hsforms.com"]').each(function (i) {
     try {
       if (pricingSelected) {
         let plan = pricingSelected;
+
         if (selectedProduct && selectedProduct === 'vue') {
           plan =
             pricingSelected.toLowerCase().trim() === 'corporate'
               ? 'Core'
               : 'Core + Essentials';
         }
+
         const extraData = { name: 'plan', value: plan };
         parsedFormData.push(extraData);
       }
