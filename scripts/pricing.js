@@ -407,7 +407,7 @@ var pricingSelected;
         enterpriseDesc.innerText = ANGULAR_DESC_ENTERPRISE;
 
         document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
-          btn.textContent = 'Talk to Sales';
+          btn.textContent = 'Get a Custom Quote';
         });
         break;
 
@@ -569,10 +569,6 @@ var pricingSelected;
       pricingSelected = event.target.getAttribute('data-nes-plan');
 
       switch (selectedProduct) {
-        case PRODUCTS.angular:
-          window.open('https://xlts.dev/contact-us?referral=herodevs');
-          break;
-
         case PRODUCTS.protractor:
           location.href = `${window.location.origin}/support/nes-protractor#contact-us`;
           break;
@@ -877,9 +873,11 @@ var pricingSelected;
       const iframeContainer = document.querySelector(
         '.meetings-iframe-container'
       );
+
       if (iframeContainer) {
         iframeContainer.style.minHeight = 'auto';
       }
+
       calendarContainer.querySelector('iframe').style.minHeight = innerHeight;
     }, 1500);
   }
@@ -907,19 +905,23 @@ var pricingSelected;
     const numberOfSeats = parseInt(seatsInput.value);
 
     const formReady = numberOfSeats >= 1;
+
     if (!formReady) {
       errorMessageStep2.style.display = 'block';
       errorMessageStep2.firstChild.textContent =
         'Please select the number of seats 💺';
       return false;
     }
+
     errorMessageStep2.style.display = 'none';
     return true;
   }
 
   step1Next.addEventListener('click', () => {
     const updatedParams = getContactInfo();
+
     updatedParams.pricing_step = '2';
+
     if (verifyStep1()) {
       addOrUpdateURLParams(updatedParams);
     }
@@ -927,15 +929,20 @@ var pricingSelected;
 
   step2Next.addEventListener('click', () => {
     const urlContactInputObject = getContactInfo();
+
     urlContactInputObject.nes_seats = isNaN(Number(seatsInput.value))
       ? 1
       : Number(seatsInput.value);
+
     appendInputsToFormAndSubmit(urlContactInputObject, submitForm);
+
     if (verifyStep2()) {
       let newUrlParams = {};
+
       Object.keys(urlContactInputObject).forEach(key => {
         newUrlParams[key] = null;
       });
+
       newUrlParams.pricing_step = 3;
       newUrlParams.seats = seatsInput.value;
       addOrUpdateURLParams(newUrlParams);
