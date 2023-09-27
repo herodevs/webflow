@@ -60,12 +60,12 @@ var pricingSelected;
     drupal: 'drupal',
   };
   var PRODUCTS_NAME = {
-    [PRODUCTS.angular]: 'AngularJS',
-    [PRODUCTS.nesAngular]: 'NES Angular',
-    [PRODUCTS.vue]: 'NES Vue2',
-    [PRODUCTS.protractor]: 'NES Protractor',
-    [PRODUCTS.bootstrap]: 'NES Bootstrap',
-    [PRODUCTS.drupal]: 'NES Drupal',
+    [PRODUCTS.angular]: 'AngularJS NES (formerly XLTS)',
+    [PRODUCTS.nesAngular]: 'Angular NES',
+    [PRODUCTS.vue]: 'Vue2 NES',
+    [PRODUCTS.protractor]: 'Protractor NES',
+    [PRODUCTS.bootstrap]: 'Bootstrap NES',
+    [PRODUCTS.drupal]: 'Drupal NES',
   };
 
   const progressBar = document.getElementById('pricing-progress-bar');
