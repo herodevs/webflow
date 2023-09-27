@@ -48,6 +48,7 @@ $('form[action^="https://api.hsforms.com"]').each(function (i) {
     try {
       if (selectedProduct) {
         const products = {
+          angular: 'NES AngularJS',
           vue: 'NES Vue',
           nesAngular: 'NES Angular',
           protractor: 'NES Protractor',
