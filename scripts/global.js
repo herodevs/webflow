@@ -184,8 +184,10 @@ $('form[action^="https://api.hsforms.com"]').each(function (i) {
              * page is NOT disclosures
              */
             if (
-              (isOnURL('/support') || isOnURL('/contact')) &&
-              !isOnURL('support/disclosures')
+              (
+                (isOnURL('/support') || isOnURL('/contact')) &&
+                !isOnURL('support/disclosures')
+              ) || isOnURL('jw-test')
             ) {
               document.location.href = '../thank-you';
             } else if (isOnURL('support/disclosures')) {
