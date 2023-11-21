@@ -28,6 +28,7 @@ var pricingSelected;
 
   const step1Next = document.getElementById('step-1-btn');
   const step2Next = document.getElementById('step-2-next');
+  const originalStep2ButtonStyle = step2Next.style;
   const step2Before = document.getElementById('step-2-previous');
   const step3Before = document.getElementById('step-3-previous');
   // const step3Next = document.getElementById('');
@@ -183,7 +184,9 @@ var pricingSelected;
       case PRODUCTS.vue:
         renderVueDescription();
         break;
-
+      case PRODUCTS.angular:
+        renderAngularDesciription();
+        break;
       case PRODUCTS.bootstrap:
       case PRODUCTS.drupal:
         columns[0].innerHTML = '';
@@ -195,6 +198,221 @@ var pricingSelected;
           column.innerHTML = originalColumns[i].innerHTML;
         });
         break;
+    }
+
+    function renderAngularDesciription() {
+      const leftBullets = [
+        'Continuous vulnerability scanning',
+        'Modern browser compatibility',
+        '14-day critical patch SLA',
+      ].map(bullet => {
+        return `
+          <div class="bullet-container">
+            <img src="https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg" loading="lazy" width="20" alt="" class="pricing-checkmark">
+            <div class="pricing__bullet-text">${bullet}</div>
+          </div>
+        `;
+      });
+
+      leftColumn.innerHTML = leftBullets.join('');
+
+      const right_leftBulletItems = [
+        {
+          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
+          name: 'Angular UI Components',
+        },
+        {
+          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
+          name: 'Angular UI Router',
+        },
+        {
+          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
+          name: 'angular-moment',
+        },
+        {
+          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
+          name: 'ocLazyLoad',
+        },
+        {
+          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
+          name: 'angular-modal-service',
+        },
+      ];
+
+      const right_rightBulletItems = [
+        {
+          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
+          name: 'Angular UI Bootstrap',
+        },
+        {
+          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
+          name: 'angular-translate',
+        },
+        {
+          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
+          name: 'angular-local-storage',
+        },
+        {
+          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
+          name: 'angular-filter',
+        },
+        {
+          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
+          name: 'angular-drag-and-drop-lists',
+        },
+      ];
+
+      const getColumn = items => {
+        return `
+          <div class="core-plus-column">
+            ${items
+              .map(item => {
+                const itemIcon = item.icon
+                  ? `<img src="${item.icon}" loading="lazy" width="20" alt="">`
+                  : `&nbsp;`;
+                const itemName = item.name
+                  ? `<span class="pricing__bullet-text">${item.name}</span>`
+                  : ``;
+                const className =
+                  item.icon && item.name ? `core-plus-cell` : 'hider';
+                return `
+                    <div class="${className}">
+                      ${itemIcon}
+                      ${itemName}
+                    </div>
+                  `;
+              })
+              .join('')}
+          </div>
+        `;
+      };
+
+      rightColumn.innerHTML = `
+        <style>
+
+          .core-plus-parent-container {
+            padding-right: 50px !important;
+          }
+
+          .core-plus-bullet {
+            text-align: center;
+          }
+
+          .core-plus {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            grid-auto-flow: column;
+            border-radius: 10px 10px 10px 10px;
+            margin-top: 1em;
+            width: calc(100% + 18px);
+          }
+          
+          .core-plus-column {
+            display: contents;
+          }
+          
+          .core-plus-cell {
+            text-align: left;
+            padding: 15px 5px 5px 10px;
+            line-height: .5em;
+            white-space: nowrap;
+          }
+
+          .core-plus .core-plus-column:first-child .core-plus-cell:first-child {
+            border-radius: 5px 0 0 0;
+            border-right: 0;
+            border-bottom: 0;
+          }
+
+          .core-plus .core-plus-column:first-child .core-plus-cell:last-child {
+            border-radius: 0 0 0 5px;
+            border-top: 0;
+            border-right: 0;
+          }
+
+          .core-plus .core-plus-column:first-child .core-plus:nth-of-type(2) {
+            border-right: 0;
+          }
+
+          .core-plus .core-plus-column:last-child .core-plus-cell:last-child {
+            border-radius: 0 0 5px 0;
+            border-top: 0;
+          }
+
+          .core-plus .core-plus-column:last-child .core-plus-cell:first-child {
+            border-radius: 0 5px 0 0;
+            border-bottom: 0;
+          }
+
+          @media screen and (max-width: 959px) {
+            .core-plus-parent-container {
+              padding-right: 0 !important;
+            }
+
+            .core-plus-bullet {
+              margin: 0 10% 0 10%;
+            }
+
+            .core-plus {
+              grid-template-columns: repeat(1, 1fr);
+              grid-template-rows: repeat(10, 1fr);
+              width: 93% !important;
+              margin: auto !important;
+              margin-top: 1em !important;
+            }
+
+            .core-plus-column .hider {
+              display: none !important;
+            }
+            
+            .core-plus-cell {
+              display: block !important;
+              padding: 15px 5px 5px 9% !important;
+            }
+
+            .core-plus .core-plus-column:first-child .core-plus-cell:first-child {
+              border-radius: 5px 5px 0 0 !important;
+            }
+
+            .core-plus .core-plus-column:first-child .core-plus-cell:last-child {
+              border-radius: 0 0 0 0 !important;
+            }
+
+            .core-plus .core-plus-column:last-child .core-plus-cell:last-child {
+              border-radius: 0 0 5px 5px !important;
+            }
+
+            .core-plus .core-plus-column:last-child .core-plus-cell:first-child {
+              border-radius: 0 0 0 0 !important;
+            }
+          }
+
+        </style>
+
+        <div class="bullet-container" style="padding-right: 0; display: block;">
+
+          <div class="pricing__bullet-text core-plus-bullet" style="white-space: normal">
+            Everything in Core plus compatibility and security patching for:
+          </div>
+
+          
+          <div class="core-plus">
+            ${getColumn(right_leftBulletItems.concat(right_rightBulletItems))}
+
+          </div>
+        </div>
+
+      `;
+      // ${getColumn(right_rightBulletItems)}
+      const parent = document.querySelector('.core-plus-bullet').parentElement.parentElement;
+      const parentClasses = parent.getAttribute('class');
+      if (!~parentClasses.indexOf('core-plus-parent-container')) {
+        parent.setAttribute(
+          'class',
+          parentClasses + ' ' + 'core-plus-parent-container'
+        );
+      }
     }
 
     function renderVueDescription() {
@@ -398,8 +616,8 @@ var pricingSelected;
 
     switch (product) {
       case PRODUCTS.angular:
-        leftPricingColumnHeader.innerText = originalLeftColumnHeaderText;
-        rightPricingColumnHeader.innerText = originalRightColumnHeaderText;
+        leftPricingColumnHeader.innerText = 'Core';
+        rightPricingColumnHeader.innerText = 'Core + Essentials';
 
         corpPrice.innerText = ANGULAR_CORP;
         enterprisePrice.innerText = ANGULAR_ENTERPRISE;
@@ -724,6 +942,7 @@ var pricingSelected;
         generalForm.style.display = 'none';
         calendarContainer.style.display = 'none';
         stepMessage.textContent = `Step ${step} of ${TOTAL_STEPS}`;
+        seatsInput.value = 1;
         emulateFormSubmission();
         break;
       }
@@ -907,13 +1126,17 @@ var pricingSelected;
     const formReady = numberOfSeats >= 1;
 
     if (!formReady) {
-      errorMessageStep2.style.display = 'block';
-      errorMessageStep2.firstChild.textContent =
-        'Please select the number of seats 💺';
+      seatsInput.value = 1;
+      // step2Next.style = originalStep2ButtonStyle + '; pointer-events: none;'
+      // errorMessageStep2.style.display = 'block';
+      // errorMessageStep2.firstChild.textContent =
+      //   'Please select the number of seats 💺';
+      // return false;
       return false;
     }
-
-    errorMessageStep2.style.display = 'none';
+    // step2Next.style = originalStep2ButtonStyle;
+    // errorMessageStep2.firstChild.textContent = '';
+    // errorMessageStep2.style.display = 'none';
     return true;
   }
 
@@ -960,6 +1183,10 @@ var pricingSelected;
   pricingCalculatorModalBackdrop.addEventListener('click', () => {
     addOrUpdateURLParams({ pricing_step: null, product: null, seats: null });
   });
+
+  seatsInput.addEventListener('change', () => {
+    verifyStep2()
+  })
 
   window.addEventListener('popstate', function (event) {
     // Your code to execute when the back button is clicked
