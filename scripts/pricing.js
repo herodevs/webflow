@@ -214,43 +214,20 @@ var pricingSelected;
         `;
       });
 
+      // Angular UI Components
+      // Angular UI Bootstrap
+      // angular-filter
+      // angular-local-storage
+      // angular-moment
       leftColumn.innerHTML = leftBullets.join('');
-
       const right_leftBulletItems = [
-        {
-          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-          name: 'Angular UI Components',
-        },
         {
           icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
           name: 'Angular UI Router',
         },
         {
           icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-          name: 'angular-moment',
-        },
-        {
-          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-          name: 'ocLazyLoad',
-        },
-        {
-          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-          name: 'angular-modal-service',
-        },
-      ];
-
-      const right_rightBulletItems = [
-        {
-          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
           name: 'Angular UI Bootstrap',
-        },
-        {
-          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-          name: 'angular-translate',
-        },
-        {
-          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-          name: 'angular-local-storage',
         },
         {
           icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
@@ -258,7 +235,38 @@ var pricingSelected;
         },
         {
           icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-          name: 'angular-drag-and-drop-lists',
+          name: 'angular-local-storage',
+        },
+        {
+          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
+          name: 'angular-moment',
+        },
+      ];
+      // angular-translate
+      // angular-translate-loader-static-files
+      // Protractor
+      // ui-select
+      // ui-sortable
+      const right_rightBulletItems = [
+        {
+          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
+          name: 'angular-translate',
+        },
+        {
+          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
+          name: 'angular-translate-loader-static-files',
+        },
+        {
+          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
+          name: 'Protractor',
+        },
+        {
+          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
+          name: 'ui-select',
+        },
+        {
+          icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
+          name: 'ui-sortable',
         },
       ];
 
