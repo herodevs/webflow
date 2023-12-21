@@ -28,17 +28,6 @@ function calculateCountDownTime(targetDate) {
     seconds,
   };
 
-  function isWeekend(date) {
-    const day = date.getDay();
-    return day === 0 || day === 6; // Sunday or Saturday
-  }
-
-  function isHoliday(date) {
-    // Check if the given date is a holiday based on your holiday calendar
-    // Implement the logic to check against the list of holidays
-    return false;
-  }
-
   function calculateBusinessDaysRemaining() {
     let currentDateTimestamp = currentDate.getTime();
 
@@ -47,9 +36,7 @@ function calculateCountDownTime(targetDate) {
     while (currentDateTimestamp < targetDate) {
       currentDate.setDate(currentDate.getDate() + 1);
 
-      if (!isWeekend(currentDate) && !isHoliday(currentDate)) {
-        businessDays++;
-      }
+      businessDays++;
 
       currentDateTimestamp = currentDate.getTime();
     }
