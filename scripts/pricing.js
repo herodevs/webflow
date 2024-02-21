@@ -8,6 +8,7 @@ var pricingSelected;
   const protractorToggle = document.querySelector('#protractor-toggle');
   const nesBootstrapToggle = document.querySelector('#bootstrap-toggle');
   const nesDrupalToggle = document.querySelector('#drupal-toggle');
+  const nesJQueryToggle = document.querySelector('#jquery-toggle');
 
   const corpPrice = document.querySelector('#corporate-price');
   const enterprisePrice = document.querySelector('#enterprise-price');
@@ -59,7 +60,9 @@ var pricingSelected;
     protractor: 'protractor',
     bootstrap: 'bootstrap',
     drupal: 'drupal',
+    jquery: 'jquery'
   };
+
   var PRODUCTS_NAME = {
     [PRODUCTS.angular]: 'AngularJS NES (formerly XLTS)',
     [PRODUCTS.nesAngular]: 'Angular NES',
@@ -67,6 +70,7 @@ var pricingSelected;
     [PRODUCTS.protractor]: 'Protractor NES',
     [PRODUCTS.bootstrap]: 'Bootstrap NES',
     [PRODUCTS.drupal]: 'Drupal NES',
+    [PRODUCTS.jquery]: 'JQuery NES'
   };
 
   const progressBar = document.getElementById('pricing-progress-bar');
@@ -167,6 +171,12 @@ var pricingSelected;
   const DRUPAL_DESC_CORP = BOOTSTRAP_DESC_CORP;
   const DRUPAL_DESC_ENTERPRISE = DRUPAL_DESC_CORP;
 
+  const JQUERY_CORP = BOOTSTRAP_CORP;
+  const JQUERY_ENTERPRISE = DRUPAL_CORP;
+
+  const JQUERY_DESC_CORP = BOOTSTRAP_DESC_CORP;
+  const JQUERY_DESC_ENTERPRISE = DRUPAL_DESC_CORP;
+
   const leftPricingColumnHeader = document.getElementById('left-column-header');
   const originalLeftColumnHeaderText = leftPricingColumnHeader.innerText;
 
@@ -187,8 +197,11 @@ var pricingSelected;
       case PRODUCTS.angular:
         renderAngularDesciription();
         break;
-      case PRODUCTS.bootstrap:
       case PRODUCTS.drupal:
+        renderDrupalDesciription()
+        break;
+      case PRODUCTS.bootstrap:
+      case PRODUCTS.jquery:
         columns[0].innerHTML = '';
         columns[1].innerHTML = '';
         break;
@@ -617,10 +630,151 @@ var pricingSelected;
         );
       }
     }
+
+    function renderDrupalDesciription() {
+      const leftBullets = [
+        'Compatible with Linux distributions (such as Ubuntu and CentOS), Windows Server, and MacOS Server',
+        'Compatible with PHP7',
+        'Compatible with modern browsers',
+        '14-day critical path SLA',
+        'Support for up to 100 modules',
+      ].map(bullet => {
+        return `
+          <div class="bullet-container">
+            <img src="https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg" loading="lazy" width="20" alt="" class="pricing-checkmark">
+            <div class="pricing__bullet-text">${bullet}</div>
+          </div>
+        `;
+      });
+
+      leftColumn.innerHTML = leftBullets.join('');
+      const right_leftBulletItems = [
+        {
+          icon: '',
+          name: 'Includes everything in Drupal 7 Core, plus security support for additional modules that are critical for extended Drupal 7 functionality',
+        },
+        {
+          icon: '',
+          name: 'Contact sales for a full list of supported modules',
+        },
+      ];
+
+      const right_rightBulletItems = [];
+
+      const getColumn = items => {
+        return `
+          <div class="core-plus-column">
+            ${items
+              .map(item => {
+                const itemIcon = item.icon
+                  ? `<img src="${item.icon}" loading="lazy" width="20" alt="">`
+                  : `&nbsp;`;
+                const itemName = item.name
+                  ? `<span class="pricing__bullet-text">${item.name}</span>`
+                  : ``;
+                const className =
+                  item.icon && item.name ? `core-plus-cell` : 'hider';
+                return `
+                    <div class="${className}">
+                      ${itemIcon}
+                      ${itemName}
+                    </div>
+                  `;
+              })
+              .join('')}
+          </div>
+        `;
+      };
+
+      rightColumn.innerHTML = `
+        <style>
+
+          .core-plus-parent-container {
+            padding-right: 50px !important;
+          }
+
+          .core-plus-bullet {
+            text-align: center;
+          }
+
+          .core-plus {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            grid-auto-flow: column;
+            border-radius: 10px 10px 10px 10px;
+            margin-top: 1em;
+            width: calc(100% + 18px);
+          }
+          
+          .core-plus-column {
+            display: contents;
+          }
+          
+          .core-plus-cell {
+            text-align: left;
+            padding: 15px 5px 5px 10px;
+            line-height: .5em;
+            white-space: nowrap;
+          }
+
+          @media screen and (max-width: 959px) {
+            .core-plus-parent-container {
+              padding-right: 0 !important;
+            }
+
+            .core-plus-bullet {
+              margin: 0 10% 0 10%;
+            }
+
+            .core-plus {
+              grid-template-columns: repeat(1, 1fr);
+              grid-template-rows: repeat(10, 1fr);
+              width: 93% !important;
+              margin: auto !important;
+              margin-top: 1em !important;
+            }
+
+            .core-plus-column .hider {
+              display: none !important;
+            }
+            
+            .core-plus-cell {
+              display: block !important;
+              padding: 15px 5px 5px 9% !important;
+            }
+
+          }
+
+        </style>
+
+        <div class="bullet-container" style="padding-right: 0; display: block;">
+          
+          <div class="core-plus">
+            ${getColumn(right_leftBulletItems.concat(right_rightBulletItems))}
+
+          </div>
+        </div>
+
+      `;
+
+      const parent = document.querySelector('.core-plus-bullet').parentElement.parentElement;
+      const parentClasses = parent.getAttribute('class');
+      if (!~parentClasses.indexOf('core-plus-parent-container')) {
+        parent.setAttribute(
+          'class',
+          parentClasses + ' ' + 'core-plus-parent-container'
+        );
+      }
+    }
+
   }
 
   function renderPricing(product) {
     selectNESProduct(product);
+    document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
+      btn.textContent = 'Get a Custom Quote';
+    });
 
     switch (product) {
       case PRODUCTS.angular:
@@ -632,9 +786,6 @@ var pricingSelected;
         corpDesc.innerText = ANGULAR_DESC_CORP;
         enterpriseDesc.innerText = ANGULAR_DESC_ENTERPRISE;
 
-        document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
-          btn.textContent = 'Get a Custom Quote';
-        });
         break;
 
       case PRODUCTS.nesAngular:
@@ -646,9 +797,6 @@ var pricingSelected;
         enterprisePrice.innerText = ANGULAR_ENTERPRISE;
         enterpriseDesc.innerText = ANGULAR_DESC_ENTERPRISE;
 
-        document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
-          btn.textContent = 'Get a Custom Quote';
-        });
         break;
 
       case PRODUCTS.protractor:
@@ -660,9 +808,6 @@ var pricingSelected;
         enterprisePrice.innerText = PROTRACTOR_ENTERPRISE;
         enterpriseDesc.innerText = PROTRACTOR_DESC_ENTERPRISE;
 
-        document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
-          btn.textContent = 'Get a Free License';
-        });
         break;
 
       case PRODUCTS.vue:
@@ -674,9 +819,6 @@ var pricingSelected;
         corpDesc.innerText = VUE_DESC_CORP;
         enterpriseDesc.innerText = VUE_DESC_ENTERPRISE;
 
-        document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
-          btn.textContent = 'Get a Custom Quote';
-        });
         break;
 
       case PRODUCTS.bootstrap:
@@ -688,9 +830,6 @@ var pricingSelected;
         enterprisePrice.innerText = BOOTSTRAP_ENTERPRISE;
         enterpriseDesc.innerHTML = BOOTSTRAP_DESC_ENTERPRISE;
 
-        document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
-          btn.textContent = 'Learn More';
-        });
         break;
 
       case PRODUCTS.drupal:
@@ -702,9 +841,17 @@ var pricingSelected;
         enterprisePrice.innerText = DRUPAL_ENTERPRISE;
         enterpriseDesc.innerHTML = DRUPAL_DESC_ENTERPRISE;
 
-        document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
-          btn.textContent = 'Learn More';
-        });
+        break;
+
+      case PRODUCTS.jquery:
+        leftPricingColumnHeader.innerText = originalLeftColumnHeaderText;
+        rightPricingColumnHeader.innerText = originalRightColumnHeaderText;
+
+        corpPrice.innerText = JQUERY_CORP;
+        corpDesc.innerHTML = JQUERY_DESC_CORP;
+        enterprisePrice.innerText = JQUERY_ENTERPRISE;
+        enterpriseDesc.innerHTML = JQUERY_DESC_ENTERPRISE;
+
         break;
     }
 
@@ -727,7 +874,10 @@ var pricingSelected;
     'click',
     NESProductClick(PRODUCTS.bootstrap)
   );
+
   nesDrupalToggle.addEventListener('click', NESProductClick(PRODUCTS.drupal));
+
+  nesDrupalToggle.addEventListener('click', NESProductClick(PRODUCTS.jquery));
 
   function NESProductClick(product) {
     return () => {
@@ -754,6 +904,9 @@ var pricingSelected;
 
     nesDrupalToggle.className = toggle.nes.off.button;
     nesDrupalToggle.firstChild.className = toggle.nes.off.text;
+
+    nesJQueryToggle.className = toggle.nes.off.button;
+    nesJQueryToggle.firstChild.className = toggle.nes.off.text;
 
     switch (selectedProduct) {
       case PRODUCTS.angular:
@@ -784,6 +937,11 @@ var pricingSelected;
       case PRODUCTS.drupal:
         nesDrupalToggle.className = toggle.nes.on.button;
         nesDrupalToggle.firstChild.className = toggle.nes.on.text;
+        break;
+
+      case PRODUCTS.jquery:
+        nesJQueryToggle.className = toggle.nes.on.button;
+        nesJQueryToggle.firstChild.className = toggle.nes.on.text;
         break;
     }
   }
