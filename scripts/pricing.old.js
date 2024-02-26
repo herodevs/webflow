@@ -1,702 +1,6 @@
 var selectedProduct;
 var pricingSelected;
 
-const title0 = document.getElementById('left-column-header');
-const title1 = document.getElementById('right-column-header');
-const subtitle0 = document.querySelector('#corporate-price');
-const subtitle1 = document.querySelector('#enterprise-price');
-const description0 = document.querySelector('#corporate-description');
-const description1 = document.querySelector('#enterprise-description');
-
-const highlightSection0 = title0.parentElement.parentElement.querySelectorAll('.pricing__bullet-list')[0];
-const highlightSection1 = title1.parentElement.parentElement.querySelectorAll('.pricing__bullet-list')[0];
-
-const toggleClasses = {
-  // on: {
-  //   buttonClass: 'toggle--active',
-  //   textClass: 'toggle-text--active',
-  // },
-  // off: {
-  //   buttonClass: 'toggle--unactive',
-  //   text: 'toggle-text--unactive',
-  // },
-  // nes: {
-    on: {
-      buttonClass: 'nes-toggle--active',
-      textClass: 'toggle-text--active',
-    },
-    off: {
-      buttonClass: 'nes-toggle--unactive',
-      textClass: 'toggle-text--unactive',
-    },
-  // },
-};
-
-function displaySelectedProduct(product) {
-
-  // for each package
-  for (let i = 0; i < product.packages.length; i++) {
-    const package = product.packages[i];
-    eval('title' + i).innerText = package.title;
-    eval('subtitle' + i).innerText = package.subtitle;
-    eval('description' + i).innerText = package.description;
-    eval('highlightSection' + i).innerHTML = package.generateHighlightMarkup();
-  }
-
-  Object.keys(Products).forEach((productKey) => {
-    const currentProduct = Products[productKey];
-    if (product.name === currentProduct.name) {
-      product.toggle.element.className === toggleClasses.on.buttonClass;
-      product.toggle.element.firstChild.className = toggleClasses.on.textClass;
-      return;
-    } 
-    product.toggle.element.className === toggleClasses.off.buttonClass;
-    product.toggle.element.firstChild.className = toggleClasses.off.textClass;
-  })
-
-}
-
-function defaultRenderPackageHighlights(highlights) {
-  /**
-   * `scope` ensures styles only apply to their own elements, when rendered
-   * The reason for this is bc we are adding dynamic `<style>` tags to the page, which will 
-   * affect anything else with the same class name. This ensures they're always unique to the 
-   * elements they're meant to apply style to.
-   */ 
-  const scope = Date.now() + Math.floor(Math.random() * 100); 
-  const bullets = highlights.map((highlight, i) => {
-    const icon = highlight.icon ?
-      '<img src="' + highlight.icon + '" loading="lazy" width="20" alt="" class="pricing-checkmark">':
-      '';
-    const text = '<div class="pricing__bullet-text">' + highlight.text + '</div>';
-
-    return [
-      `<div class="bullet-container">`,
-        icon,
-        text,
-      '</div>'
-    ].join('');
-
-  });
-
-  // TODO: put this css somewhere else?
-  const styles = `
-  <style>
-    .core-plus-parent-container-${scope} {
-      padding-right: 50px !important;
-    }
-
-    .core-plus-bullet-${scope} {
-      text-align: center;
-    }
-
-    .core-plus-${scope} {
-      display: grid;
-      grid-template-columns: repeat(1, 1fr);
-      grid-template-rows: repeat(10, 1fr);
-      grid-auto-flow: column;
-      border-radius: 10px 10px 10px 10px;
-      margin-top: 1em;
-      width: calc(100% + 18px);
-    }
-    
-    .core-plus-column-${scope} {
-      display: contents;
-    }
-    
-    .core-plus-cell-${scope} {
-      text-align: left;
-      padding: 15px 5px 5px 10px;
-      line-height: .5em;
-      white-space: nowrap;
-    }
-
-    @media screen and (max-width: 959px) {
-      .core-plus-parent-container-${scope} {
-        padding-right: 0 !important;
-      }
-
-      .core-plus-bullet-${scope} {
-        margin: 0 10% 0 10%;
-      }
-
-      .core-plus-${scope} {
-        grid-template-columns: repeat(1, 1fr);
-        grid-template-rows: repeat(10, 1fr);
-        width: 93% !important;
-        margin: auto !important;
-        margin-top: 1em !important;
-      }
-
-      .core-plus-column-${scope} .hider {
-        display: none !important;
-      }
-      
-      .core-plus-cell-${scope} {
-        display: block !important;
-        padding: 15px 5px 5px 9% !important;
-      }
-    }
-
-  </style>`
-
-  return [
-    styles,
-    '<div class="bullet-container" style="padding-right: 0; display: block;">',
-      `<div class="core-plus-${scope}">`,
-        bullets.join(''),
-      '</div>',
-    '</div>',
-  ].join('')
-}
-
-function renderVueCoreEssentialsHighlights(highlights) {
-  /**
-   * `scope` ensures styles only apply to their own elements, when rendered
-   * The reason for this is bc we are adding dynamic `<style>` tags to the page, which will 
-   * affect anything else with the same class name. This ensures they're always unique to the 
-   * elements they're meant to apply style to.
-   */ 
-  const scope = Date.now() + Math.floor(Math.random() * 100);
-  const leftColumn = highlights.slice(0, 2);
-  const rightColumn = highlights.slice(2, 5)
-  
-  const getColumn = items => {
-    return `
-    <div class="core-plus-column-${scope}">
-      ${items
-        .map(item => {
-          const itemIcon = item.icon
-            ? `<img src="${item.icon}" loading="lazy" width="20" alt="">`
-            : `&nbsp;`;
-          const itemName = item.text
-            ? `<span class="pricing__bullet-text">${item.text}</span>`
-            : ``;
-          const className =
-            item.icon && item.text ? `core-plus-cell-${scope}` : 'hider';
-          return `
-              <div class="${className}">
-                ${itemIcon}
-                ${itemName}
-              </div>
-            `;
-        })
-        .join('')}
-    </div>
-  `;
-  };
-
-  return `
-    <style>
-      .core-plus-parent-container-${scope} {
-        
-      }
-
-      .core-plus-bullet-${scope} {
-        text-align: center;
-      }
-
-      .core-plus-${scope} {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(3, 1fr);
-        grid-auto-flow: row;
-        border-radius: 10px 10px 10px 10px;
-        margin-top: 1em;
-        width: calc(100% + 18px);
-      }
-      
-      .core-plus-column-${scope} {
-        display: contents;
-      }
-      
-      .core-plus-cell-${scope} {
-        border: 1px solid #feeefd;
-        text-align: left;
-        padding: 15px 5px 5px 10px;
-        line-height: .5em;
-        white-space: nowrap;
-      }
-
-
-      @media screen and (max-width: 959px) {
-        .core-plus-parent-container-${scope} {
-          padding-right: 0 !important;
-        }
-
-        .core-plus-bullet-${scope} {
-          margin: 0 10% 0 10%;
-        }
-
-        .core-plus-${scope} {
-          grid-template-columns: repeat(1, 1fr) !important;
-          grid-template-rows: repeat(6, 1fr) !important;
-          width: 93% !important;
-          margin: auto !important;
-          margin-top: 1em !important;
-        }
-
-        .core-plus-column-${scope} .hider {
-          display: none !important;
-        }
-        
-        .core-plus-cell-${scope} {
-          display: block !important;
-          border: 1px solid #feeefd !important;
-          padding: 15px 5px 5px 9% !important;
-        }
-
-        .core-plus-${scope} .core-plus-column-${scope}:first-child .core-plus-cell-${scope}:first-child {
-          border-radius: 5px 5px 0 0 !important;
-        }
-
-        .core-plus-${scope} .core-plus-column-${scope}:first-child .core-plus-cell-${scope}:last-child {
-          border-radius: 0 0 0 0 !important;
-        }
-
-        .core-plus-${scope} .core-plus-column-${scope}:last-child .core-plus-cell-${scope}:last-child {
-          border-radius: 0 0 5px 5px !important;
-        }
-
-        .core-plus-${scope} .core-plus-column-${scope}:last-child .core-plus-cell-${scope}:first-child {
-          border-radius: 0 0 0 0 !important;
-        }
-      }
-
-    </style>
-
-    <div class="bullet-container core-plus-parent-container-${scope}" style="padding-right: 0; display: block;">
-
-      <div class="pricing__bullet-text core-plus-bullet-${scope}" style="white-space: normal">
-        Everything in Core plus compatibility and security patching for:
-      </div>
-
-      
-      <div class="core-plus-${scope}">
-        ${getColumn(leftColumn)}
-        ${getColumn(rightColumn)}
-      </div>
-    </div>
-
-  `;
-
-}
-
-const Products = {
-  // get: (product) => {
-  //   return Products[product];
-  // },
-  angularjs: {
-    title: 'AngularJS NES (formerly XLTS)',
-    interest: 'angular',
-    toggle: {
-      element: document.querySelector('#angular-toggle'),
-      select: () => {}
-    },
-    packages: [
-      {
-        title: 'Core',
-        subtitle: 'Contact Sales for Pricing',
-        description: 'Billed annually. Priced per seat',
-        CTA: {
-          text: 'Get A Custom Quote',
-          onClick: () => { }
-        },
-        generateHighlightMarkup: () => defaultRenderPackageHighlights(Products.angularjs.packages[0].highlights),
-        highlights: [
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Continuous vulnerability scanning'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Modern browser compatibility'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: '14-day critical patch SLA'
-          }
-        ]
-      },
-      {
-        title: 'Core + Essentials',
-        subtitle: 'Contact Sales for Pricing',
-        description: 'Billed annually. Priced per seat',
-        CTA: {
-          text: 'Get A Custom Quote',
-          onClick: () => {}
-        },
-        generateHighlightMarkup: () => defaultRenderPackageHighlights(Products.angularjs.packages[1].highlights),
-        highlights: [
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Angular UI Router',
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Angular UI Bootstrap',
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'angular-filter',
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'angular-local-storage',
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'angular-moment',
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'angular-translate',
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'angular-translate-loader-static-files',
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Protractor',
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'ui-select',
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'ui-sortable',
-          },
-        ]
-      },
-    ]
-  },
-  angular: {
-    title: 'Angular NES', 
-    interest: 'nesAngular',
-    toggle: {
-      element: document.querySelector('#nes-angular-toggle'),
-      select: () => {}
-    },
-    packages: [
-      {
-        title: 'Corporate',
-        subtitle: 'Contact Sales for Pricing',
-        description: 'Billed annually. Priced per seat',
-        CTA: {
-          text: 'Get A Custom Quote',
-          onClick: () => {}
-        },
-        generateHighlightMarkup: () => defaultRenderPackageHighlights(Products.angular.packages[0].highlights),
-        highlights: [
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: '4 seats – additional seats available'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Continuous vulnerability scanning'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Modern browser compatibility'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: '14-day critical patch SLA'
-          }
-        ]
-      },
-      {
-        title: 'Enterprise',
-        subtitle: 'Contact Sales for Pricing',
-        description: 'Billed annually. Priced per seat',
-        CTA: {
-          text: 'Get A Custom Quote',
-          onClick: () => {}
-        },
-        generateHighlightMarkup: () => defaultRenderPackageHighlights(Products.angular.packages[1].highlights),
-        highlights: [
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Includes 100 seats'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Continuous vulnerability scanning'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Modern browser compatibility'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: '14-day critical patch SLA'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Dedicated account manager'
-          }
-        ]
-      },
-    ]
-  },
-  vue: {
-    title: 'Vue2 NES',
-    interest: 'vue',
-    toggle: {
-      element: document.querySelector('#vue-toggle'),
-      select: () => {}
-    },
-    packages: [
-      {
-        title: 'Core',
-        subtitle: 'Contact Sales for Pricing',
-        description: 'Billed annually. Priced per seat',
-        CTA: {
-          text: 'Get A Custom Quote',
-          onClick: () => {}
-        },
-        generateHighlightMarkup: () => defaultRenderPackageHighlights(Products.vue.packages[0].highlights),
-        highlights: [
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Continuous vulnerability scanning'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Modern browser compatibility'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: '14-day critical patch SLA'
-          }
-        ]
-      },
-      {
-        title: 'Core + Essentials',
-        subtitle: 'Contact Sales for Pricing',
-        description: 'Billed annually. Priced per seat',
-        CTA: {
-          text: 'Get A Custom Quote',
-          onClick: () => {}
-        },
-        generateHighlightMarkup: () => renderVueCoreEssentialsHighlights(Products.vue.packages[1].highlights),
-        highlights: [
-          {
-            icon: 'https://herodevs.github.io/webflow/images/nuxt.png',
-            text: 'Nuxt',
-          },
-          {
-            icon: 'https://herodevs.github.io/webflow/images/Vuetify.png',
-            text: 'Vuetify',
-          },
-          {
-            icon: 'https://herodevs.github.io/webflow/images/BootstrapVue.png',
-            text: 'BootstrapVue',
-          },
-          {
-            icon: 'https://herodevs.github.io/webflow/images/vuejs.png',
-            text: 'Vue Router',
-          },
-          {
-            icon: 'https://herodevs.github.io/webflow/images/vuejs.png',
-            text: 'Vuex',
-          }
-        ]
-      },
-    ]
-  },
-  protractor: {
-    title: 'Protractor NES',
-    interest: 'protractor',
-    toggle: {
-      element: document.querySelector('#protractor-toggle'),
-    },
-    packages: [
-      {
-        title: 'Corporate',
-        subtitle: 'Free through Aug 2024',
-        description: '',
-        CTA: {
-          text: 'Get A Free License',
-          onClick: () => {
-            window.location.href = `${window.location.origin}/support/nes-protractor#contact-us`;
-          }
-        },
-        generateHighlightMarkup: () => defaultRenderPackageHighlights(Products.protractor.packages[0].highlights),
-        highlights: [
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: '4 seats – additional seats available'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Continuous vulnerability scanning'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Modern browser compatibility'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: '14-day critical patch SLA'
-          }
-        ]
-      },
-      {
-        title: 'Enterprise',
-        subtitle: 'Free through Aug 2024',
-        description: '',
-        CTA: {
-          text: 'Get A Free License',
-          onClick: () => {
-            window.location.href = `${window.location.origin}/support/nes-protractor#contact-us`;
-          }
-        },
-        generateHighlightMarkup: () => defaultRenderPackageHighlights(Products.protractor.packages[1].highlights),
-        highlights: [
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Includes 100 seats'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Continuous vulnerability scanning'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Modern browser compatibility'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: '14-day critical patch SLA'
-          },
-          {
-            icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-            text: 'Dedicated account manager'
-          }
-        ]
-      },
-    ]
-  },
-  nesBootstrap: {
-    title: 'Bootstrap NES',
-    interest: 'bootstrap',
-    toggle: {
-      element: document.querySelector('#bootstrap-toggle'),
-      select: () => {}
-    },
-    packages: [
-      {
-        title: 'Corporate',
-        subtitle: 'Price Coming Soon',
-        description: 'We aren\'t ready to announce our prices yet. While you\'re waiting, come learn all about this upcoming product at the link below!',
-        CTA: {
-          text: 'Learn More',
-          onClick: () => {}
-        },
-        generateHighlightMarkup: () => defaultRenderPackageHighlights(Products.nesBootstrap.packages[0].highlights),
-        highlights: [ ]
-      },
-      {
-        title: 'Enterprise',
-        subtitle: 'Price Coming Soon',
-        description: 'We aren\'t ready to announce our prices yet. While you\'re waiting, come learn all about this upcoming product at the link below!',
-        CTA: {
-          text: 'Learn More',
-          onClick: () => {}
-        },
-        generateHighlightMarkup: () => defaultRenderPackageHighlights(Products.nesBootstrap.packages[1].highlights),
-        highlights: []
-      },
-    ]
-  },
-  nesDrupal: {
-    title: 'Drupal NES',
-    interest: 'drupal',
-    toggle: {
-      element: document.querySelector('#drupal-toggle'),
-      select: () => {}
-    },
-    packages: [
-      {
-        title: 'Drupal 7 Core',
-        subtitle: 'Contact Sales for Pricing',
-        description: 'Billed annually. Priced per seat and number of sites.',
-        CTA: {
-          text: 'Talk to Sales',
-          onClick: () => {}
-        },
-        generateHighlightMarkup: () => defaultRenderPackageHighlights(Products.nesDrupal.packages[0].highlights),
-        highlights: [ ]
-      },
-      {
-        title: 'Drupal 7 Essentials',
-        subtitle: 'Contact Sales for Pricing',
-        description: 'Billed annually. Priced per seat.',
-        CTA: {
-          text: 'Talk to Sales',
-          onClick: () => {}
-        },
-        generateHighlightMarkup: () => defaultRenderPackageHighlights(Products.nesDrupal.packages[1].highlights),
-        highlights: []
-      },
-    ]
-  },
-  // jQuery: {
-  //   title: 'jQuery NES',
-  //   interest: 'jquery',
-  //   toggle: {
-  //     element: document.querySelector('#jquery-toggle'),
-  //     select: () => {}
-  //   },
-  //   packages: [
-  //     {
-  //       title: 'Corporate',
-  //       subtitle: 'Price Coming Soon',
-  //       description: 'We aren\'t ready to announce our prices yet. While you\'re waiting, come learn all about this upcoming product at the link below!',
-  //       CTA: {
-  //         text: 'Learn More',
-  //         onClick: () => {}
-  //       },
-  //       generateHighlightMarkup: () => defaultRenderPackageHighlights(Products.jQuery.packages[0].highlights),
-  //       highlights: [ ]
-  //     },
-  //     {
-  //       title: 'Enterprise',
-  //       subtitle: 'Price Coming Soon',
-  //       description: 'We aren\'t ready to announce our prices yet. While you\'re waiting, come learn all about this upcoming product at the link below!',
-  //       CTA: {
-  //         text: 'Learn More',
-  //         onClick: () => {}
-  //       },
-  //       generateHighlightMarkup: () => defaultRenderPackageHighlights(Products.jQuery.packages[1].highlights),
-  //       highlights: []
-  //     },
-  //   ]
-  // }
-}
-
-function boot () {
-
-}
-
-Object.keys(Products).forEach((productKey) => {
-  try {
-    Products[productKey].toggle.element.addEventListener(
-      'click',
-      // NESProductClick(PRODUCTS.nesAngular)
-      () => displaySelectedProduct(Products[productKey])
-    );
-  }catch (ex) {
-    console.log(productKey);
-  }
-})
-
-displaySelectedProduct(Products.vue)
-
 (function () {
   const angularToggle = document.querySelector('#angular-toggle');
   const nesAngularToggle = document.querySelector('#nes-angular-toggle');
@@ -704,6 +8,11 @@ displaySelectedProduct(Products.vue)
   const protractorToggle = document.querySelector('#protractor-toggle');
   const nesBootstrapToggle = document.querySelector('#bootstrap-toggle');
   const nesDrupalToggle = document.querySelector('#drupal-toggle');
+
+  const corpPrice = document.querySelector('#corporate-price');
+  const enterprisePrice = document.querySelector('#enterprise-price');
+  const corpDesc = document.querySelector('#corporate-description');
+  const enterpriseDesc = document.querySelector('#enterprise-description');
 
   const categoryPricingSection = document.querySelector('#category-pricing');
   const nesProductSelectro = document.querySelector('#nes-product-selector');
@@ -743,7 +52,7 @@ displaySelectedProduct(Products.vue)
     card: pricingModalCard,
   };
 
-  const PRODUCTS = {
+  var PRODUCTS = {
     angular: 'angular',
     nesAngular: 'nesAngular',
     vue: 'vue',
@@ -751,8 +60,7 @@ displaySelectedProduct(Products.vue)
     bootstrap: 'bootstrap',
     drupal: 'drupal',
   };
-
-  const PRODUCTS_NAME = {
+  var PRODUCTS_NAME = {
     [PRODUCTS.angular]: 'AngularJS NES (formerly XLTS)',
     [PRODUCTS.nesAngular]: 'Angular NES',
     [PRODUCTS.vue]: 'Vue2 NES',
@@ -807,7 +115,26 @@ displaySelectedProduct(Products.vue)
 
   submitButton.type = 'submit';
 
-
+  const toggle = {
+    on: {
+      button: 'toggle--active',
+      text: 'toggle-text--active',
+    },
+    off: {
+      button: 'toggle--unactive',
+      text: 'toggle-text--unactive',
+    },
+    nes: {
+      on: {
+        button: 'nes-toggle--active',
+        text: 'toggle-text--active',
+      },
+      off: {
+        button: 'nes-toggle--unactive',
+        text: 'toggle-text--unactive',
+      },
+    },
+  };
 
   const ANGULAR_CORP = 'Contact Sales for Pricing';
   const ANGULAR_ENTERPRISE = ANGULAR_CORP;
@@ -1300,12 +627,11 @@ displaySelectedProduct(Products.vue)
         leftPricingColumnHeader.innerText = 'Core';
         rightPricingColumnHeader.innerText = 'Core + Essentials';
 
-        priceContainer1.innerText = ANGULAR_CORP;
-        priceContainer2.innerText = ANGULAR_ENTERPRISE;
-        priceContainer1Description.innerText = ANGULAR_DESC_CORP;
-        priceContainer2Description.innerText = ANGULAR_DESC_ENTERPRISE;
+        corpPrice.innerText = ANGULAR_CORP;
+        enterprisePrice.innerText = ANGULAR_ENTERPRISE;
+        corpDesc.innerText = ANGULAR_DESC_CORP;
+        enterpriseDesc.innerText = ANGULAR_DESC_ENTERPRISE;
 
-        
         document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
           btn.textContent = 'Get a Custom Quote';
         });
@@ -1315,10 +641,10 @@ displaySelectedProduct(Products.vue)
         leftPricingColumnHeader.innerText = originalLeftColumnHeaderText;
         rightPricingColumnHeader.innerText = originalRightColumnHeaderText;
 
-        priceContainer1.innerText = ANGULAR_CORP;
-        priceContainer1Description.innerText = ANGULAR_DESC_CORP;
-        priceContainer2.innerText = ANGULAR_ENTERPRISE;
-        priceContainer2Description.innerText = ANGULAR_DESC_ENTERPRISE;
+        corpPrice.innerText = ANGULAR_CORP;
+        corpDesc.innerText = ANGULAR_DESC_CORP;
+        enterprisePrice.innerText = ANGULAR_ENTERPRISE;
+        enterpriseDesc.innerText = ANGULAR_DESC_ENTERPRISE;
 
         document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
           btn.textContent = 'Get a Custom Quote';
@@ -1329,10 +655,10 @@ displaySelectedProduct(Products.vue)
         leftPricingColumnHeader.innerText = originalLeftColumnHeaderText;
         rightPricingColumnHeader.innerText = originalRightColumnHeaderText;
 
-        priceContainer1.innerText = PROTRACTOR_CORP;
-        priceContainer1Description.innerText = PROTRACTOR_DESC_CORP;
-        priceContainer2.innerText = PROTRACTOR_ENTERPRISE;
-        priceContainer2Description.innerText = PROTRACTOR_DESC_ENTERPRISE;
+        corpPrice.innerText = PROTRACTOR_CORP;
+        corpDesc.innerText = PROTRACTOR_DESC_CORP;
+        enterprisePrice.innerText = PROTRACTOR_ENTERPRISE;
+        enterpriseDesc.innerText = PROTRACTOR_DESC_ENTERPRISE;
 
         document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
           btn.textContent = 'Get a Free License';
@@ -1343,10 +669,10 @@ displaySelectedProduct(Products.vue)
         leftPricingColumnHeader.innerText = 'Core';
         rightPricingColumnHeader.innerText = 'Core + Essentials';
 
-        priceContainer1.innerText = VUE_CORP;
-        priceContainer2.innerText = VUE_ENTERPRISE;
-        priceContainer1Description.innerText = VUE_DESC_CORP;
-        priceContainer2Description.innerText = VUE_DESC_ENTERPRISE;
+        corpPrice.innerText = VUE_CORP;
+        enterprisePrice.innerText = VUE_ENTERPRISE;
+        corpDesc.innerText = VUE_DESC_CORP;
+        enterpriseDesc.innerText = VUE_DESC_ENTERPRISE;
 
         document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
           btn.textContent = 'Get a Custom Quote';
@@ -1357,10 +683,10 @@ displaySelectedProduct(Products.vue)
         leftPricingColumnHeader.innerText = originalLeftColumnHeaderText;
         rightPricingColumnHeader.innerText = originalRightColumnHeaderText;
 
-        priceContainer1.innerText = BOOTSTRAP_CORP;
-        priceContainer1Description.innerHTML = BOOTSTRAP_DESC_CORP;
-        priceContainer2.innerText = BOOTSTRAP_ENTERPRISE;
-        priceContainer2Description.innerHTML = BOOTSTRAP_DESC_ENTERPRISE;
+        corpPrice.innerText = BOOTSTRAP_CORP;
+        corpDesc.innerHTML = BOOTSTRAP_DESC_CORP;
+        enterprisePrice.innerText = BOOTSTRAP_ENTERPRISE;
+        enterpriseDesc.innerHTML = BOOTSTRAP_DESC_ENTERPRISE;
 
         document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
           btn.textContent = 'Learn More';
@@ -1371,10 +697,10 @@ displaySelectedProduct(Products.vue)
         leftPricingColumnHeader.innerText = originalLeftColumnHeaderText;
         rightPricingColumnHeader.innerText = originalRightColumnHeaderText;
 
-        priceContainer1.innerText = DRUPAL_CORP;
-        priceContainer1Description.innerHTML = DRUPAL_DESC_CORP;
-        priceContainer2.innerText = DRUPAL_ENTERPRISE;
-        priceContainer2Description.innerHTML = DRUPAL_DESC_ENTERPRISE;
+        corpPrice.innerText = DRUPAL_CORP;
+        corpDesc.innerHTML = DRUPAL_DESC_CORP;
+        enterprisePrice.innerText = DRUPAL_ENTERPRISE;
+        enterpriseDesc.innerHTML = DRUPAL_DESC_ENTERPRISE;
 
         document.querySelectorAll('.talk-to-sales-button').forEach(btn => {
           btn.textContent = 'Learn More';
@@ -1520,14 +846,6 @@ displaySelectedProduct(Products.vue)
   step3Form.addEventListener('submit', e => {
     e.preventDefault();
   });
-
-
-
-
-
-
-
-
 
   function getCurrentParams() {
     const url = new URL(window.location.href);
@@ -1765,7 +1083,6 @@ displaySelectedProduct(Products.vue)
     submitButton.type = 'submit';
     submitButton.click();
   }
-
   // var calendarInitted = false;
   function showCalendar() {
     calendarContainer.innerHTML = `
@@ -1895,4 +1212,3 @@ displaySelectedProduct(Products.vue)
 
   NESProductClick(PRODUCTS.vue)();
 })();
-

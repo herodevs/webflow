@@ -1,7 +1,7 @@
-const IS_PRODUCTION =
-  window.location.href.indexOf('www.herodevs.com') > 0 ? true : false;
+console.log('!!!!!!!!!!!!!!HERODEVS: BOOTING GLOBAL SCRIPT!!!!!!!!!!!!!!!!')
+let GLOBALJS_IS_PRODUCTION = window.location.href.indexOf('www.herodevs.com') > 0 ? true : false;
 
-if (IS_PRODUCTION) {
+if (GLOBALJS_IS_PRODUCTION) {
   window.LogRocket && window.LogRocket.init('9cf0rr/herodevs-website');
   window.LogRocket &&
     window.LogRocket.getSessionURL(function (sessionURL) {
@@ -27,45 +27,10 @@ $('form[action^="https://api.hsforms.com"]').each(function (i) {
       value: dataObject[1], // the value of the input
     }));
 
-    try {
-      if (pricingSelected) {
-        let plan = pricingSelected;
-
-        if (selectedProduct && (selectedProduct === 'vue' || selectedProduct === 'angular')) {
-          plan =
-            pricingSelected.toLowerCase().trim() === 'corporate'
-              ? 'Core'
-              : 'Core + Essentials';
-        }
-
-        const extraData = { name: 'plan', value: plan };
-        parsedFormData.push(extraData);
+    for (let i = 0; i < parsedFormData.length; i++) {
+      if (parsedFormData[i] && parsedFormData[i].name === 'nes_seats') {
+        parsedFormData[i].value = +parsedFormData[i].value;
       }
-    } catch (err) {
-      console.log('We have no pricingSelected on this page.');
-    }
-
-    try {
-      if (selectedProduct) {
-        const products = {
-          angular: 'NES AngularJS',
-          vue: 'NES Vue',
-          nesAngular: 'NES Angular',
-          protractor: 'NES Protractor',
-          boostrap: 'NES Bootstrap',
-          spring: 'NES Spring',
-          drupal: 'NES Drupal',
-          something: 'Something Else',
-          endbridge: 'Endbridge',
-          other: 'Other',
-        };
-        const productValueName = products[selectedProduct];
-        console.log({ productValueName });
-        const extraData = { name: 'product_interest', value: productValueName };
-        parsedFormData.push(extraData);
-      }
-    } catch (err) {
-      console.log('We have no selectedProduct on this page.');
     }
 
     console.log(parsedFormData);
@@ -76,7 +41,7 @@ $('form[action^="https://api.hsforms.com"]').each(function (i) {
       return newAcc;
     }, {});
 
-    if (IS_PRODUCTION) {
+    if (GLOBALJS_IS_PRODUCTION) {
       LogRocket.identify(formDataAsObject.email, {
         name: formDataAsObject.firstname + ' ' + formDataAsObject.lastname,
         email: formDataAsObject.email,
@@ -166,17 +131,17 @@ $('form[action^="https://api.hsforms.com"]').each(function (i) {
     };
 
     const final_data = JSON.stringify(data); // turn that javascript object into a json string
-
+    const theUrl = `${e.target.action}?_=${Date.now()}`
     $.ajax({
-      url: e.target.action,
+      url: theUrl,
       method: 'POST',
       data: final_data,
       contentType: 'application/json',
-      success: function (response) {
+      success: function (response, status, xhr) {
         function isOnURL(url) {
           return !!~window.location.href.indexOf(url);
         }
-
+        console.log('url', theUrl);
         if (response) {
           // if response inline, display contents
           if (response.inlineMessage) {
@@ -231,9 +196,9 @@ $('form[action^="https://api.hsforms.com"]').each(function (i) {
   });
 });
 
-const pricingColumnNodes = document.querySelectorAll('.pricing__bullet-list');
+// const pricingColumnNodes = document.querySelectorAll('.pricing__bullet-list');
 const originalColumns = [];
-pricingColumnNodes.forEach(n => originalColumns.push(n.cloneNode(true)));
+// pricingColumnNodes.forEach(n => originalColumns.push(n.cloneNode(true)));
 
 function setPricingColumnsBody(theSelectedProduct) {
   const columns = document.querySelectorAll('.pricing__bullet-list');
@@ -653,9 +618,9 @@ function setPricingColumnsBody(theSelectedProduct) {
     }
     
   } else {
-    pricingColumnNodes.forEach((column, i) => {
-      column.innerHTML = originalColumns[i].innerHTML;
-    });
+    // pricingColumnNodes.forEach((column, i) => {
+    //   column.innerHTML = originalColumns[i].innerHTML;
+    // });
   }
   //
 }
