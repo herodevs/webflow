@@ -1080,7 +1080,7 @@ function initializeProductsDefinition() {
             },
             {
               icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
-              text: 'Compatible with PHP7'
+              text: 'Compatible with supported D7 versions'
             },
             {
               icon: 'https://assets.website-files.com/62865614b39c464b76d339aa/63fe08dd56f1ef2552260c0c_check_circle.svg',
