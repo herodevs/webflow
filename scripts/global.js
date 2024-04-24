@@ -155,6 +155,8 @@ $('form[action^="https://api.hsforms.com"]').each(function (i) {
               ) || isOnURL('jw-test')
             ) {
               document.location.href = '../thank-you';
+            } else if (isOnURL('/newsletter-archive')) {
+              document.location.href = './form-submitted-newsletter-signup';
             } else if (isOnURL('support/disclosures')) {
               /**
                * page IS disclosures
