@@ -157,6 +157,8 @@ $('form[action^="https://api.hsforms.com"]').each(function (i) {
               document.location.href = '../thank-you';
             } else if (isOnURL('/newsletter-archive')) {
               document.location.href = './form-submitted-newsletter-signup';
+            } else if (isOnURL('/our-partners')) {
+              document.location.href = './form-submitted-partners-thank-you';
             } else if (isOnURL('support/disclosures')) {
               /**
                * page IS disclosures
