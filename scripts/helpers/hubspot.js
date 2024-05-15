@@ -148,7 +148,10 @@ $(`form[action^="${HS_CONF.ACTION}"]`).each(function (i) {
               document.location.href = './form-submitted-newsletter-signup';
             } else if (isOnURL('/our-partners')) {
               document.location.href = './form-submitted-partners-thank-you';
-            } else if (isOnURL('support/disclosures')) {
+            } else if (isOnURL('/blog-posts/')) {
+              document.location.href = '../form-submitted-newsletter-signup';
+            }
+            else if (isOnURL('support/disclosures')) {
               /**
                * page IS disclosures
                */
