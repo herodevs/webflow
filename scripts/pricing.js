@@ -1105,11 +1105,11 @@ function initializeProductsDefinition() {
           highlights: [
             {
               icon: '',
-              text: 'Includes everything in Drupal 7 Core, plus security support for selected additional modules that are critical for extended Drupal 7 functionality'
+              text: '‍Our Drupal Essentials support coverage includes all contrib modules*.'
             },
             {
               icon: '',
-              text: 'Contact Sales for full list of supported modules'
+              text: '*This excludes custom-modules, modules requiring 3rd party APIs, closed-source / closed-license modules.'
             }
           ]
         },
