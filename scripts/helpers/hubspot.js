@@ -5,22 +5,10 @@
   };
 
   try {
-    const options = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        authorization:
-          'Bearer c8f6967b1c75db213847e1b77ed8618b3fa30a9a9e72bc15d7f370bd5ad25b66',
-      },
-    };
-
     const rules = await fetch(
-      'https://api.webflow.com/v2/collections/664621e4859f07541bec2c08/items',
-      options,
+      'https://hd-webflow-api.netlify.app/api/form-redirects',
     ).then(response => response.json());
-    HS_CONF.REDIRECT_RULES.push(
-      ...(rules.items ?? [])
-    );
+    HS_CONF.REDIRECT_RULES.push(...(rules.items ?? []));
     console.log(HS_CONF.REDIRECT_RULES);
   } catch (err) {}
 
