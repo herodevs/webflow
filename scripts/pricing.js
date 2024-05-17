@@ -1109,7 +1109,7 @@ function initializeProductsDefinition() {
             },
             {
               icon: '',
-              text: '*This excludes custom-modules, modules requiring 3rd party APIs, closed-source / closed-license modules.'
+              text: '*This excludes custom-modules, modules which break due to 3rd party APIs, closed-source / closed-license modules.'
             }
           ]
         },
