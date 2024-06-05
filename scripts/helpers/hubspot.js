@@ -164,9 +164,9 @@
               } else if (isOnURL('/blog-posts/')) {
                 document.location.href = '../form-submitted-newsletter-signup';
               } else if (isOnURL('/vulnerability-directory/')) {
-                document.location.href = './vulnerability-alerts-signup';
-              } else if (isOnURL('/vulnerability-directory')) {
                 document.location.href = '../vulnerability-alerts-signup';
+              } else if (isOnURL('/vulnerability-directory')) {
+                document.location.href = './vulnerability-alerts-signup';
               } else if (isOnURL('support/disclosures')) {
                 /**
                  * page IS disclosures
