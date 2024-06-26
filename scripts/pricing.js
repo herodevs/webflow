@@ -853,7 +853,7 @@ function initializeProductsDefinition() {
       ]
     },
     vue: {
-      interest: 'Vue NES',
+      interest: 'Vue 2 NES',
       toggle: {
         element: document.querySelector('#vue-toggle'),
         select: () => {}
@@ -1058,7 +1058,7 @@ function initializeProductsDefinition() {
       ]
     },
     nesDrupal: {
-      interest: 'Drupal NES',
+      interest: 'Drupal 7 NES',
       toggle: {
         element: document.querySelector('#drupal-toggle'),
       },
