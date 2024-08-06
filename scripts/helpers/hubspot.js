@@ -167,6 +167,8 @@
                 document.location.href = '../vulnerability-alerts-signup';
               } else if (isOnURL('/vulnerability-directory')) {
                 document.location.href = './vulnerability-alerts-signup';
+              } else if (isOnURL('/pricing-test')) {
+                document.location.href = './thank-you';
               } else if (isOnURL('support/disclosures')) {
                 /**
                  * page IS disclosures
