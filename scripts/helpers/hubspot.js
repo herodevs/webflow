@@ -4,14 +4,6 @@
     REDIRECT_RULES: [],
   };
 
-  try {
-    const rules = await fetch(
-      'https://hd-webflow-api.netlify.app/api/form-redirects',
-    ).then(response => response.json());
-    HS_CONF.REDIRECT_RULES.push(...(rules.items ?? []));
-    console.log(HS_CONF.REDIRECT_RULES);
-  } catch (err) {}
-
   $(`form[action^="${HS_CONF.ACTION}"]`).each(function (i) {
     // intercept forms whos action goes to hubspot
     $(this).find('input[type=checkbox]').val('true');

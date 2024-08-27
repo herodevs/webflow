@@ -925,13 +925,11 @@ function initializeProductsDefinition() {
       packages: [
         {
           title: 'Corporate',
-          subtitle: 'Free through Aug 2024',
-          description: '',
+          subtitle: 'Contact Sales for Pricing',
+          description: 'Billed annually. Priced per seat',
           CTA: {
-            text: 'Get A Free License',
-            onClick: () => {
-              window.location.href = `${window.location.origin}/support/nes-protractor#contact-us`;
-            }
+            text: 'Get A Custom Quote',
+            onClick: defaultCTAClick
           },
           generateHighlightMarkup: () => defaultRenderPackageHighlights(ProductsDefinition.protractor.packages[0].highlights),
           highlights: [
@@ -955,13 +953,11 @@ function initializeProductsDefinition() {
         },
         {
           title: 'Enterprise',
-          subtitle: 'Free through Aug 2024',
-          description: '',
+          subtitle: 'Contact Sales for Pricing',
+          description: 'Billed annually. Priced per seat',
           CTA: {
-            text: 'Get A Free License',
-            onClick: () => {
-              window.location.href = `${window.location.origin}/support/nes-protractor#contact-us`;
-            }
+            text: 'Get A Custom Quote',
+            onClick: defaultCTAClick
           },
           generateHighlightMarkup: () => defaultRenderPackageHighlights(ProductsDefinition.protractor.packages[1].highlights),
           highlights: [
