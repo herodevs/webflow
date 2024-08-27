@@ -17,11 +17,7 @@
       ENV: window.HD.IS_PROD ? 'main' : 'staging',
       PATH: `https://raw.githubusercontent.com/herodevs/webflow/${window.HD.IS_PROD ? 'main' : 'staging'}/scripts`,
     },
-    FEATURES: [
-      {
-        script: 'pricing-columns.js',
-      },
-    ],
+    FEATURES: [],
   };
 
   console.log(`BOOTING [${window.HD.IS_PROD ? 'PRODUCTION' : 'STAGING'}]`);
