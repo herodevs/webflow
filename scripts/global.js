@@ -12,16 +12,12 @@
       window.location.href.toLowerCase().indexOf('www.herodevs.com') > -1,
   };
   const HD_CONF = {
-    LIB_SCRIPTS: ['log-rocket.js', 'hubspot.js', 'cta.js'],
+    LIB_SCRIPTS: ['log-rocket.js', 'hubspot.js'],
     SCRIPT: {
       ENV: window.HD.IS_PROD ? 'main' : 'staging',
       PATH: `https://raw.githubusercontent.com/herodevs/webflow/${window.HD.IS_PROD ? 'main' : 'staging'}/scripts`,
     },
-    FEATURES: [
-      {
-        script: 'pricing-columns.js',
-      },
-    ],
+    FEATURES: [],
   };
 
   console.log(`BOOTING [${window.HD.IS_PROD ? 'PRODUCTION' : 'STAGING'}]`);
