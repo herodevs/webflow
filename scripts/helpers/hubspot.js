@@ -161,6 +161,8 @@
                 document.location.href = './vulnerability-alerts-signup';
               } else if (isOnURL('/pricing')) {
                 document.location.href = './thank-you';                
+              } else if (isOnURL('drupal-7-channel-partners')) {
+                document.location.href = './form-submitted-partners';
               } else if (isOnURL('support/disclosures')) {
                 /**
                  * page IS disclosures
