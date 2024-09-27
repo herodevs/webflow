@@ -29,16 +29,18 @@
         return newAcc;
       }, {});
 
-      if (window.HD.IS_PROD && !!LogRocket) {
-        LogRocket.identify(formDataAsObject.email, {
-          name: formDataAsObject.firstname + ' ' + formDataAsObject.lastname,
-          email: formDataAsObject.email,
-
-          // Add your own custom user variables here
-          company: formDataAsObject.company,
-          phone: formDataAsObject.phone,
-          plan: formDataAsObject.plan,
-        });
+      try {
+        if (window.HD.IS_PROD) {
+          LogRocket.identify(formDataAsObject.email, {
+            name: formDataAsObject.firstname + ' ' + formDataAsObject.lastname,
+            email: formDataAsObject.email,
+            company: formDataAsObject.company,
+            phone: formDataAsObject.phone,
+            plan: formDataAsObject.plan,
+          });
+        }
+      } catch(err) {
+        console.log('LogRocket is not available!');
       }
 
       const goToWebinarWebinarKey = parsedFormData.find(
