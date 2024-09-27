@@ -10,9 +10,7 @@
     $(this).submit(function (e) {
       // when the form submits
       e.preventDefault(); //stop the form from submitting to webflow
-      console.log({ target: e.target });
       const formData = new FormData(e.target); // get the form data
-      console.log({ formData: formData.entries() });
       const parsedFormData = [...formData.entries()].map(dataObject => ({
         // convert data to array
         name: dataObject[0], // make sure the name of the input is the same as the hubspot input name
@@ -25,15 +23,13 @@
         }
       }
 
-      console.log(parsedFormData);
-
       const formDataAsObject = parsedFormData.reduce((acc, current) => {
         let newAcc = { ...acc };
         newAcc[current.name] = current.value;
         return newAcc;
       }, {});
 
-      if (window.HD.IS_PROD) {
+      if (window.HD.IS_PROD && !!LogRocket) {
         LogRocket.identify(formDataAsObject.email, {
           name: formDataAsObject.firstname + ' ' + formDataAsObject.lastname,
           email: formDataAsObject.email,
@@ -136,7 +132,6 @@
           function isOnURL(url) {
             return !!~window.location.href.indexOf(url);
           }
-          console.log('url', theUrl);
           if (response) {
             // if response inline, display contents
             if (response.inlineMessage) {
