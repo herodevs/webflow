@@ -11,6 +11,7 @@
     IS_PROD:
       window.location.href.toLowerCase().indexOf('www.herodevs.com') > -1,
   };
+
   const HD_CONF = {
     LIB_SCRIPTS: ['log-rocket.js', 'hubspot.js'],
     SCRIPT: {
