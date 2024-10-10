@@ -160,6 +160,8 @@
                 document.location.href = './thank-you';                
               } else if (isOnURL('drupal-7-channel-partners')) {
                 document.location.href = './form-submitted-partners';
+              } else if (isOnURL('/whitepaper/')) {
+                document.location.href = '../form-submitted-white-papers';
               } else if (isOnURL('support/disclosures')) {
                 /**
                  * page IS disclosures
