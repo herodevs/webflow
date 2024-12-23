@@ -162,7 +162,13 @@
                 document.location.href = './form-submitted-partners';
               } else if (isOnURL('/whitepaper/')) {
                 document.location.href = '../form-submitted-white-papers';
-              } else if (isOnURL('/finance')) {
+              } else if (isOnURL('/solutions/finance')) {
+                document.location.href = './thank-you';                
+              } else if (isOnURL('/solutions/healthcare')) {
+                document.location.href = './thank-you';                
+              } else if (isOnURL('/solutions/government')) {
+                document.location.href = './thank-you';                
+              } else if (isOnURL('/solutions/technology')) {
                 document.location.href = './thank-you';                
               } else if (isOnURL('support/disclosures')) {
                 /**
