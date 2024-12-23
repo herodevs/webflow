@@ -13,7 +13,7 @@
   };
 
   const HD_CONF = {
-    LIB_SCRIPTS: ['log-rocket.js', 'hubspot.js'],
+    LIB_SCRIPTS: ['hubspot.js'],
     SCRIPT: {
       ENV: window.HD.IS_PROD ? 'main' : 'staging',
       PATH: `https://raw.githubusercontent.com/herodevs/webflow/${window.HD.IS_PROD ? 'main' : 'staging'}/scripts`,
