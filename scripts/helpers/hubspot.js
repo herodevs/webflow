@@ -169,7 +169,9 @@
               } else if (isOnURL('/solutions/government')) {
                 document.location.href = './thank-you';                
               } else if (isOnURL('/solutions/technology')) {
-                document.location.href = './thank-you';                
+                document.location.href = './thank-you';       
+              } else if (isOnURL('/disclosures')) {
+                document.location.href = './form-submitted-report-vulnerability';                
               } else if (isOnURL('support/disclosures')) {
                 /**
                  * page IS disclosures
