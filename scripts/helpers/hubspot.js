@@ -172,6 +172,8 @@
                 document.location.href = './thank-you';       
               } else if (isOnURL('/disclosures')) {
                 document.location.href = './form-submitted-report-vulnerability';                
+              } else if (isOnURL('/xeol')) {
+                document.location.href = './thank-you-xeol';                
               } else if (isOnURL('support/disclosures')) {
                 /**
                  * page IS disclosures
