@@ -167,13 +167,15 @@
               } else if (isOnURL('/solutions/healthcare')) {
                 document.location.href = './thank-you';                
               } else if (isOnURL('/solutions/government')) {
-                document.location.href = './thank-you';                
+                document.location.href = './thank-you';
               } else if (isOnURL('/solutions/technology')) {
-                document.location.href = './thank-you';       
+                document.location.href = './thank-you';
               } else if (isOnURL('/disclosures')) {
-                document.location.href = './form-submitted-report-vulnerability';                
+                document.location.href = './form-submitted-report-vulnerability';
               } else if (isOnURL('/xeol')) {
-                document.location.href = './thank-you-xeol';                
+                document.location.href = './thank-you-xeol';
+              } else if (isOnURL('/managing-your-tech-debt-when-execs-need-features')) {
+                document.location.href = './form-submitted-webinar';
               } else if (isOnURL('support/disclosures')) {
                 /**
                  * page IS disclosures
